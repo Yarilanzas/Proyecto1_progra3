@@ -21,5 +21,7 @@ public class Main {
         frame.setVisible(true);
 
         System.out.println("Probando");
+        System.out.println("Probando1");
+
     }
 }
