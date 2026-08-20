@@ -8,7 +8,7 @@ public class Employees {
     private JPanel BusquedaPanel;
     private JTextField id;
     private JTextField nombre;
-    private JButton guardarButton;
+    private JButton buscarButton;
     private JButton ImprimirButton;
     private JLabel ID;
     private JTextField idfuncionarios;
