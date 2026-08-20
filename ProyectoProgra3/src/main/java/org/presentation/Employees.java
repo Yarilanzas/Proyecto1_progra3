@@ -6,8 +6,8 @@ public class Employees {
 
 
     private JPanel BusquedaPanel;
-    private JTextField id;
-    private JTextField nombre;
+    private JTextField idFld;
+    private JTextField nombreFld;
     private JButton buscarButton;
     private JButton ImprimirButton;
     private JLabel ID;
@@ -15,6 +15,9 @@ public class Employees {
     private JLabel Nombre;
     private JTextField nombreFuncionarios;
     private JTextField telefono;
+    private JButton guardarButton;
+    private JButton borrarButton;
+    private JButton limpiarButton;
     private JTable table1;
 
     private void createUIComponents() {
