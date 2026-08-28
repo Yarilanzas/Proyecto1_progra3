@@ -1,9 +1,7 @@
 package org.main;
+import org.presentation.login.Login;
+
 import javax.swing.*;
-
-import org.presentation.Login;
-
-import java.awt.*;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -11,7 +9,6 @@ public class Main {
     public static void main(String[] args) {
 
         Login login = new Login();
-
         JFrame frame = new JFrame("SISTEMA DE RESERVAS");
         frame.setIconImage(new ImageIcon("src/main/resources/logoReservas.png").getImage());
         frame.setContentPane(login.getPrincipalPanel());

@@ -1,4 +1,4 @@
-package org.presentation;
+package org.presentation.employee;
 
 import javax.swing.*;
 import javax.swing.ImageIcon;

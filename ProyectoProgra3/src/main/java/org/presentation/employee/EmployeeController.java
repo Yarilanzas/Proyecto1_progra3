@@ -1,4 +1,4 @@
-package org.presentation;
+package org.presentation.employee;
 
 import org.domain.Employee;
 import org.logic.EmployeeService;
