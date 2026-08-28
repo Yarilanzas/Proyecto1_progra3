@@ -31,4 +31,23 @@ public class Administrator {
     private JTextField hastaAFld;
     private JButton cargarButtonA;
     private JTable table2;
+    private JTextField descripcionFld;
+    private JButton buscarButton1;
+    private JButton imprimirButton1;
+    private JTextField IDfld;
+    private JTextField DescripcionFld2;
+    private JButton guardarButton1;
+    private JButton borrarButton1;
+    private JButton limpiarButton1;
+    private JTable table3;
+    private JComboBox comboBox1;
+    private JTextField DescripcionFld;
+    private JButton imprimirButton2;
+    private JButton buscarButton2;
+    private JTextField idfld;
+    private JTextField Descripcionfld2;
+    private JComboBox categoriacombobox;
+    private JButton button4;
+    private JButton button5;
+    private JButton button6;
 }
