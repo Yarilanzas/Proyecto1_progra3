@@ -3,6 +3,8 @@ package org.presentation.employee;
 import org.domain.Employee;
 import org.logic.EmployeeService;
 
+import java.util.List;
+
 public class EmployeeController {
     private final EmployeeService service = new EmployeeService();
     private final EmployeeModel model;
@@ -30,9 +32,14 @@ public class EmployeeController {
         model.setCurrent(model.getList().get(row));
     }
 
-    public void search(String nombre) {
+    public void search(String txt, boolean porid) {
         try {
-            model.setList(nombre.isEmpty() ? service.findAll() : service.findByName(nombre));
+            if (porid){
+                Employee e = service.findById(txt);
+                model.setList(e != null ? List.of(e) : List.of());
+            }else{
+                model.setList(txt.isEmpty() ? service.findAll() : service.findByName(txt));
+            }
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }

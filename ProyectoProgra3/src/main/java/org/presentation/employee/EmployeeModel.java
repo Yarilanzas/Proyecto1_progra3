@@ -1,32 +1,40 @@
 package org.presentation.employee;
 
 import org.domain.Employee;
+import org.presentation.AbstractModel;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.ArrayList;
 import java.util.List;
 
-public class EmployeeModel {
+public class EmployeeModel extends AbstractModel{
     public static final String LIST = "list";
     public static final String CURRENT = "current";
 
     private List<Employee> list;
     private Employee current = new Employee();
 
-    private final PropertyChangeSupport support = new PropertyChangeSupport(this);
+    public EmployeeModel(){
+        current = new Employee();
+        list = new ArrayList<>();
+    }
 
-    public void addPropertyChangeListener(PropertyChangeListener l) {
-        support.addPropertyChangeListener(l);
+    @Override
+    public void addPropertyChangeListener(PropertyChangeListener listener){
+        super.addPropertyChangeListener(listener);
+        firePropertyChange(CURRENT);
+        firePropertyChange(LIST);
     }
 
     public List<Employee> getList() { return list; }
-    public void setList(List<Employee> list) {
+    public void setList (List<Employee> list) {
         this.list = list;
-        support.firePropertyChange(LIST, null, list);
+        firePropertyChange(LIST);
     }
 
     public Employee getCurrent() { return current; }
-    public void setCurrent(Employee current) {
+    public void setCurrent(Employee current){
         this.current = current;
-        support.firePropertyChange(CURRENT, null, current);
+        firePropertyChange(CURRENT);
     }
 }
