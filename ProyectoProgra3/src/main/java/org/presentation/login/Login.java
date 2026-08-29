@@ -12,7 +12,7 @@ import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-public class Login extends JDialog {
+public class Login extends JDialog  implements PropertyChangeListener {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
@@ -61,8 +61,11 @@ public class Login extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 if(validateJTextField(idtextField1))
                     try{
-
-                    }
+                        controller.readId();
+                        JOptionPane.showMessageDialog(contentPane, "REGISTRO APLICADO", "", JOptionPane.INFORMATION_MESSAGE);
+                    } catch (Exception ex) {
+                JOptionPane.showMessageDialog(contentPane, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
             }
         });
 
@@ -78,6 +81,7 @@ public class Login extends JDialog {
         this.model = model;
         model.addPropertyChangeListener(this);
     }
+
     private void onOK() {
         // add your code here
         dispose();
@@ -96,6 +100,11 @@ public class Login extends JDialog {
             valid = false;
         }
         return valid;
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+
     }
 }
     /*public static void main(String[] args) {

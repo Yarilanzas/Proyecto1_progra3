@@ -8,9 +8,13 @@ public class ModelLogin extends AbstractModel  {
     User current;
     public static final String CURRENT = "current";
 
-    public Model() {
+    public ModelLogin() {
         current = new User() {
         };
+    }
+    public void setCurrent(User current) {
+        this.current = current;
+        firePropertyChange(CURRENT);
     }
     @Override
     public void addPropertyChangeListener(PropertyChangeListener listener) {
