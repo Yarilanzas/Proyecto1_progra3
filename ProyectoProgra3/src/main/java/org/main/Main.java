@@ -1,6 +1,5 @@
 package org.main;
-import org.presentation.login.Login;
-import org.presentation.Administrator;
+import org.presentation.administrator.Administrator;
 
 import javax.swing.*;
 import java.awt.*;
