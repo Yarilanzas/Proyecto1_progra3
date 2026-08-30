@@ -16,6 +16,7 @@ public class Data {
     @XmlElement(name = "administrator")
     private List<Administrator> administrators = new ArrayList<>();
 
+
     @XmlElementWrapper(name = "categories")
     @XmlElement(name = "category")
     private List<Category> categories = new ArrayList<>();

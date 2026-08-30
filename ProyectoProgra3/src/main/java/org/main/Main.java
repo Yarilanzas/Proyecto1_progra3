@@ -1,5 +1,8 @@
 package org.main;
 import org.presentation.administrator.AdministratorView;
+import org.presentation.login.ControllerLogin;
+import org.presentation.login.Login;
+import org.presentation.login.ModelLogin;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,27 +11,26 @@ import java.awt.*;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-
-      /*  Login login = new Login();
-        JFrame frame = new JFrame("SISTEMA DE RESERVAS");
-        frame.setIconImage(new ImageIcon("src/main/resources/logoReservas.png").getImage());
-        frame.setContentPane(login.getPrincipalPanel());
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-
-        System.out.println("Probando");
-        System.out.println("Probando1");*/
+        Login login = new Login();
 
 
-        AdministratorView admin = new AdministratorView();
+        ModelLogin model = new ModelLogin();
+
+        ControllerLogin controller = new ControllerLogin(login, model);
+
+        login.pack();
+        login.setLocationRelativeTo(null);
+        login.setVisible(true);
+
+
+        /*AdministratorView admin = new AdministratorView();
         JFrame frame = new JFrame("SISTEMA DE RESERVAS - PRUEBA");
         frame.setContentPane(admin.getPanel());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+    }*/
     }
     public static final Color BACKGROUND_ERROR = new Color(255, 102, 102);
 }

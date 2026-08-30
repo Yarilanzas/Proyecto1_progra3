@@ -2,7 +2,11 @@ package org.logic.loginLogic;
 
 import org.data.Data;
 
+import org.data.XMLRepository;
 import org.domain.User;
+
+import java.io.File;
+import java.util.Objects;
 
 public class LoginService {
     private static LoginService theInstance;
@@ -15,41 +19,52 @@ public class LoginService {
     private Data data;
 
     private LoginService() {
-        data = new Data();
+        try {
+            data = XMLRepository.instance().load();
+        } catch (Exception e) {
+            System.err.println("Error al cargar la base de datos: " + e.getMessage());
+            data = new Data();
+        }
     }
 
-    public User read(String id) throws Exception {
+    public User read(String id, String password) throws Exception {
+        //System.out.println("Buscando el XML en: " + new File("data.xml").getAbsolutePath());
         if (id == null || id.isEmpty()) {
             throw new Exception("EL ESPACIO DEL ID DEBE DE ESTAR COMPLETO");
         }
 
         String idUpper = id.toUpperCase();
+        User result = null;
 
         if (idUpper.startsWith("ADM")) {
-            User result = data.getAdministrators().stream()
+            result = data.getAdministrators().stream()
                     .filter(i -> i.getId().equals(id))
                     .findFirst()
                     .orElse(null);
 
-            if (result != null) {
-                return result;
-            } else {
+            if (result == null) {
                 throw new Exception("Administrador no existe");
             }
+
         } else if (idUpper.startsWith("FUN")) {
-            User result = data.getEmployees().stream()
+            result = data.getEmployees().stream()
                     .filter(i -> i.getId().equals(id))
                     .findFirst()
                     .orElse(null);
 
-            if (result != null) {
-                return result;
-            } else {
+            if (result == null) {
                 throw new Exception("Funcionario no existe");
             }
+
         } else {
             throw new Exception("El id debe iniciar con su distintivo");
         }
+
+        if (!result.getPassword().equals(password)) {
+            throw new Exception("Contraseña incorrecta");
+        }
+
+        return result;
     }
 
 

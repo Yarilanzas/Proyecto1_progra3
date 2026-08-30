@@ -18,9 +18,8 @@ public class ControllerLogin {
     }
 
 
-    public void login(String id) {
+    public void login(String id, String password) {
         try {
-            User usuarioLogueado = LoginService.instance().read(id); //aqui lo esta buscando en la base de datos
             if (id.toUpperCase().startsWith("ADM")) {
 
                 AdministratorView adminWindow = new AdministratorView();
@@ -28,7 +27,7 @@ public class ControllerLogin {
 
                 adminFrame.add(adminWindow.getPanel());
 
-                adminFrame.setSize(600, 400);
+                adminFrame.setSize(800, 600);
                 adminFrame.setLocationRelativeTo(null);
 
                 adminFrame.setVisible(true);
@@ -40,7 +39,7 @@ public class ControllerLogin {
 
                 employeeFrame.add(employeeWindow.getPanel());
 
-                employeeFrame.setSize(600, 400);
+                employeeFrame.setSize(800, 600);
                 employeeFrame.setLocationRelativeTo(null);
 
                 employeeFrame.setVisible(true);
