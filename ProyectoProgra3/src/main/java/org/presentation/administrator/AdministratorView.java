@@ -10,7 +10,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 
-public class Administrator implements PropertyChangeListener {
+public class AdministratorView  implements PropertyChangeListener {
     private JTabbedPane tabbedPane1;
     private JPanel BusquedaPanel;
     private JTextField nombreFld;
@@ -127,7 +127,7 @@ public class Administrator implements PropertyChangeListener {
         return Panel;
     }
 
-    public Administrator() {
+    public AdministratorView() {
 
         model = new EmployeeModel();
         controller = new EmployeeController(model);

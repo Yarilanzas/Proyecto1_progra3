@@ -61,7 +61,7 @@ public class Login extends JDialog  implements PropertyChangeListener {
             public void actionPerformed(ActionEvent e) {
                 if(validateJTextField(idtextField1))
                     try{
-                        controller.readId();
+                        controller.login(idtextField1.getText());
                         JOptionPane.showMessageDialog(contentPane, "REGISTRO APLICADO", "", JOptionPane.INFORMATION_MESSAGE);
                     } catch (Exception ex) {
                 JOptionPane.showMessageDialog(contentPane, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -75,6 +75,9 @@ public class Login extends JDialog  implements PropertyChangeListener {
 
     public void setController(ControllerLogin controller) {
         this.controller = controller;
+    }
+    public JPanel getPanel() {
+        return PrincipalPanel;
     }
 
     public void setModel(ModelLogin model) {

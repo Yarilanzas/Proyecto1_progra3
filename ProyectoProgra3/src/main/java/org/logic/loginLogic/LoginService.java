@@ -1,11 +1,8 @@
-package org.logic;
+package org.logic.loginLogic;
 
 import org.data.Data;
 
 import org.domain.User;
-import org.presentation.login.ControllerLogin;
-
-import java.awt.*;
 
 public class LoginService {
     private static LoginService theInstance;

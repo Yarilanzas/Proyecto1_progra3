@@ -1,6 +1,10 @@
 package org.presentation.login;
-import org.logic.LoginService;
 import org.domain.User;
+import org.logic.loginLogic.LoginService;
+import org.presentation.administrator.AdministratorView;
+import org.presentation.employee.EmployeeView;
+
+import javax.swing.*;
 
 public class ControllerLogin {
     Login view;
@@ -13,29 +17,39 @@ public class ControllerLogin {
         view.setModel(model);
     }
 
-    public void readId(){
-
-    }
-    public void logIn(User user) throws Exception{
-
-    }
 
     public void login(String id) {
         try {
-            User usuarioLogueado = service.read(id);
+            User usuarioLogueado = LoginService.instance().read(id); //aqui lo esta buscando en la base de datos
             if (id.toUpperCase().startsWith("ADM")) {
 
-                AdminView adminWindow = new AdminView();
-                adminWindow.setVisible(true);
+                AdministratorView adminWindow = new AdministratorView();
+                JFrame adminFrame = new JFrame("Administradores");
+
+                adminFrame.add(adminWindow.getPanel());
+
+                adminFrame.setSize(600, 400);
+                adminFrame.setLocationRelativeTo(null);
+
+                adminFrame.setVisible(true);
+
 
             } else if (id.toUpperCase().startsWith("FUN")) {
-                FuncionarioView funcionarioWindow = new FuncionarioView();
-                funcionarioWindow.setVisible(true);
+                EmployeeView employeeWindow = new EmployeeView();
+                JFrame employeeFrame = new JFrame("Funcionarios");
+
+                employeeFrame.add(employeeWindow.getPanel());
+
+                employeeFrame.setSize(600, 400);
+                employeeFrame.setLocationRelativeTo(null);
+
+                employeeFrame.setVisible(true);
             }
-            Login.dispose();
+
+            view.dispose();
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(loginView, e.getMessage(), "Error de Login", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(view, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 }

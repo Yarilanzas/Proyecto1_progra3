@@ -4,13 +4,13 @@ import javax.swing.*;
 import javax.swing.ImageIcon;
 import java.net.URL;
 
-public class Employee {
+public class EmployeeView {
     private JTabbedPane tabbedPane1;
     private JTextField frasetextField;
     private JTextField ActividadtextField1;
     private JTextField FechatextField1;
     private JButton button1;
-    private JPanel calendarbutton1;
+    private JPanel Panel;
     private JTextField horainiciotextField1;
     private JTextField horaFinaltextField1;
     private JButton button2;
@@ -44,4 +44,9 @@ public class Employee {
         //tabbedPane1.setIconAt(2, getIcono("/icons/actividades.png"));
         //tabbedPane1.setIconAt(3, getIcono("/icons/estadisticas.png"));
     }
+
+    public JPanel getPanel() {
+        return Panel;
+    }
+
 }

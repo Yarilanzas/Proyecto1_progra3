@@ -1,5 +1,5 @@
 package org.main;
-import org.presentation.administrator.Administrator;
+import org.presentation.administrator.AdministratorView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,7 +22,7 @@ public class Main {
         System.out.println("Probando1");*/
 
 
-        Administrator admin = new Administrator();
+        AdministratorView admin = new AdministratorView();
         JFrame frame = new JFrame("SISTEMA DE RESERVAS - PRUEBA");
         frame.setContentPane(admin.getPanel());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
