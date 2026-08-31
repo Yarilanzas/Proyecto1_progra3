@@ -1,12 +1,17 @@
 package org.domain;
 import java.util.*;
-import java.util.Date;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import org.data.LocalDateAdapter;
+import java.time.LocalDate;
 
 public class Reservation {
     private String id;
     private String activity;
     private Employee employee;
-    private Date date;
+
+    @XmlJavaTypeAdapter(LocalDateAdapter.class)
+    private LocalDate date;
+
     private String startTime;
     private String status; // estos dos no se si son strings
     private String endTime;
@@ -14,7 +19,7 @@ public class Reservation {
 
     public Reservation(){}
 
-    public Reservation(String id,String activity, String endTime, String status, String startTime, Date date, Employee employee) {
+    public Reservation(String id,String activity, String endTime, String status, String startTime, LocalDate date, Employee employee) {
         this.id = id;
         this.activity = activity;
         this.endTime = endTime;
@@ -52,11 +57,11 @@ public class Reservation {
         this.activity = activity;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

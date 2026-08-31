@@ -1,8 +1,17 @@
 package org.presentation.employee;
 
+import com.github.lgooddatepicker.components.DatePicker;
+import org.domain.CalendarData;
+import org.domain.Category;
+import org.logic.ReservationQueryService;
+import org.presentation.CalendarTableModel;
+
 import javax.swing.*;
 import javax.swing.ImageIcon;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.net.URL;
+import java.time.LocalDate;
 
 public class EmployeeView {
     private JTabbedPane tabbedPane1;
@@ -20,7 +29,6 @@ public class EmployeeView {
     private JButton reservarButton;
     private JButton cancelarReservaSeleccionadaButton;
     private JButton limpiarButton;
-    private JTextField fechaFld;
     private JComboBox categoriaComboBox;
     private JButton cargarButton;
     private JButton imprimirButton;
@@ -32,6 +40,31 @@ public class EmployeeView {
     private JTable table2;
     private JTable table1;
     private JButton imprimirButton1;
+    private JPanel CalendarizacionPanel;
+    private DatePicker fechaPicker;
+    private JTable Calendarizaciontable;
+
+    public EmployeeView() {
+        cargarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    LocalDate fecha = fechaPicker.getDate();
+                    Category categoria = (Category) categoriaComboBox.getSelectedItem();
+
+                    if (fecha == null || categoria == null){
+                        JOptionPane.showMessageDialog(CalendarizacionPanel,"Seleccione fecha y categoria");
+                        return;
+                    }
+
+                    CalendarData calendarData = queryService.getCalendar(fecha,categoria);
+                    Calendarizaciontable.setModel(new CalendarTableModel(calendarData));
+                } catch (Exception ex){
+                    JOptionPane.showMessageDialog(CalendarizacionPanel,ex.getMessage(),"Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+    }
 
     private ImageIcon getIcono(String ruta) {
         URL url = getClass().getResource(ruta);
@@ -48,5 +81,8 @@ public class EmployeeView {
     public JPanel getPanel() {
         return Panel;
     }
+    public JPanel getCalendarizacionPanel() { return CalendarizacionPanel; }
+
+    private final ReservationQueryService queryService = new ReservationQueryService();
 
 }

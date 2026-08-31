@@ -1,6 +1,11 @@
 package org.presentation.administrator;
 
+import com.github.lgooddatepicker.components.DatePicker;
+import org.domain.CalendarData;
+import org.domain.Category;
 import org.domain.Employee;
+import org.logic.ReservationQueryService;
+import org.presentation.CalendarTableModel;
 import org.presentation.employee.*;
 import org.main.Main;
 
@@ -8,6 +13,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.time.LocalDate;
 
 
 public class AdministratorView  implements PropertyChangeListener {
@@ -26,8 +32,6 @@ public class AdministratorView  implements PropertyChangeListener {
     private JButton borrarButton;
     private JButton limpiarButton;
     private JTable table1;
-    private JTextField fechaFld;
-    private JButton button1;
     private JComboBox categoriaComboBox;
     private JButton cargarButton;
     private JButton imprimirButton;
@@ -60,9 +64,14 @@ public class AdministratorView  implements PropertyChangeListener {
     private JComboBox comboBox1;
     private JTextField textField4;
     private JPanel Panel;
+    private DatePicker fechaPicker;
+    private JPanel PanelCate;
+    private JPanel CalendarizacionPanel;
+    private JTable Calendarizaciontable;
 
     private EmployeeModel model;
     private EmployeeController controller;
+    private final ReservationQueryService queryService = new ReservationQueryService();
 
     private Employee take(){
         Employee emp = new Employee();
@@ -126,6 +135,7 @@ public class AdministratorView  implements PropertyChangeListener {
     public JPanel getPanel() {
         return Panel;
     }
+    public JPanel getCalendarizacionPanel() { return CalendarizacionPanel; }
 
     public AdministratorView() {
 
@@ -206,5 +216,26 @@ public class AdministratorView  implements PropertyChangeListener {
             }
         });
 
+        //Calendarizacion
+
+        cargarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    LocalDate fecha = fechaPicker.getDate();
+                    Category categoria = (Category) categoriaComboBox.getSelectedItem();
+
+                    if (fecha == null || categoria == null){
+                        JOptionPane.showMessageDialog(CalendarizacionPanel,"Seleccione fecha y categoria");
+                        return;
+                    }
+
+                    CalendarData calendarData = queryService.getCalendar(fecha,categoria);
+                    Calendarizaciontable.setModel(new CalendarTableModel(calendarData));
+                } catch (Exception ex){
+                    JOptionPane.showMessageDialog(CalendarizacionPanel,ex.getMessage(),"Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
     }
 }
