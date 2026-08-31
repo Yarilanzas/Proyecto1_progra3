@@ -46,8 +46,8 @@ public class AdministratorView  implements PropertyChangeListener {
     private JTextField descripcionFld;
     private JButton buscarButton1;
     private JButton imprimirButton1;
-    private JTextField IDfld;
-    private JTextField DescripcionFld2;
+    private JTextField IdCategoriaFld;
+    private JTextField DescripcionCategoriaFld;
     private JButton guardarButton1;
     private JButton borrarButton1;
     private JButton limpiarButton1;
@@ -68,10 +68,29 @@ public class AdministratorView  implements PropertyChangeListener {
     private JPanel PanelCate;
     private JPanel CalendarizacionPanel;
     private JTable Calendarizaciontable;
+    private JPanel JPCategoria;
+    private JPanel adminPanel;
 
     private EmployeeModel model;
     private EmployeeController controller;
     private final ReservationQueryService queryService = new ReservationQueryService();
+
+
+    //Atributos administrador
+    private ControllerAdministrator controllerAdm;
+
+    public void setModelAdm(ModelAdministrator modelAdm) {
+        this.modelAdm = modelAdm;
+    }
+
+    private ModelAdministrator modelAdm;
+
+    public void setControllerAdm(ControllerAdministrator controllerAdm) {
+        this.controllerAdm = controllerAdm;
+    }
+    ///
+
+
 
     private Employee take(){
         Employee emp = new Employee();
@@ -81,6 +100,8 @@ public class AdministratorView  implements PropertyChangeListener {
         emp.setPhone(telefono.getText().trim());
         return emp;
     }
+
+
 
 
     private boolean validate(){
@@ -133,7 +154,7 @@ public class AdministratorView  implements PropertyChangeListener {
     }
 
     public JPanel getPanel() {
-        return Panel;
+        return adminPanel;
     }
     public JPanel getCalendarizacionPanel() { return CalendarizacionPanel; }
 
@@ -237,5 +258,33 @@ public class AdministratorView  implements PropertyChangeListener {
                 }
             }
         });
+
+        //categoria
+        guardarButton1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (validateJTextField(IdCategoriaFld) && validateJTextField(DescripcionCategoriaFld) ) {
+                    try {
+                        controllerAdm.saveCategory(takeCategory());
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(JPCategoria, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(JPCategoria, "Espacio vacio, asegurese de ingresar un ID y una decripcion", "Campo Vacío", JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        });
+    }
+
+    private Category takeCategory(){
+        Category cat = new Category();
+        cat.setId(IdCategoriaFld.getText().trim());
+        cat.setId(DescripcionCategoriaFld.getText().trim());
+        return cat;
+    }
+    /////
+
+    private boolean validateJTextField(JTextField name) {
+        return !name.getText().trim().isEmpty();
     }
 }

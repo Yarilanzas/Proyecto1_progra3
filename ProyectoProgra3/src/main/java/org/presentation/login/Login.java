@@ -25,14 +25,14 @@ public class Login extends JDialog implements PropertyChangeListener {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (validateJTextField(idtextField1)) {
+                if (validateJTextField(idtextField1)  && validateJTextField(clavetextField)) {
                     try {
                         controller.login(idtextField1.getText().trim(), clavetextField.getText().trim());
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(contentPane, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 } else {
-                    JOptionPane.showMessageDialog(contentPane, "Debe ingresar un ID", "Campo Vacío", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(contentPane, "Debe ingresar un ID y una clave", "Campo Vacío", JOptionPane.WARNING_MESSAGE);
                 }
             }
         });
