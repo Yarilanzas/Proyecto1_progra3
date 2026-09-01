@@ -5,6 +5,8 @@ import org.data.XMLRepository;
 import org.domain.Category;
 import org.logic.loginLogic.LoginService;
 
+import java.util.List;
+
 public class CayegoryService {
     private static CayegoryService theInstance;
 
@@ -25,20 +27,21 @@ public class CayegoryService {
 
     }
 
-   /* public void saveCategory(Category category){
+   public void saveCategory(Category category) throws Exception{
         boolean existe = data.getCategories().stream()
                 .anyMatch(c -> c.getId().equalsIgnoreCase(category.getId()));
 
         if (existe) {
-            //throw new Exception("Ya existe una categoría con ese ID.");
-           // throw new Exception("Ya existe una categoría con ese ID.")
+            throw new Exception("Ya existe una categoría con ese ID");
         }
 
 
         data.getCategories().add(category);
         XMLRepository.instance().store(data);
-        XMLRepository.instance().store(data);
-    }*/
+    }
+    public List<Category> getAll() {
+        return data.getCategories();
+    }
 
 
 }

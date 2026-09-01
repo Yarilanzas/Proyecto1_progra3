@@ -1,7 +1,12 @@
 package org.presentation.login;
+import org.domain.Employee;
 import org.domain.User;
 import org.logic.loginLogic.LoginService;
 import org.presentation.administrator.AdministratorView;
+import org.presentation.administrator.ControllerAdministrator;
+import org.presentation.administrator.ModelAdministrator;
+import org.presentation.employee.EmployeeController;
+import org.presentation.employee.EmployeeModel;
 import org.presentation.employee.EmployeeView;
 
 import javax.swing.*;
@@ -32,6 +37,8 @@ public class ControllerLogin {
 
                 adminFrame.setVisible(true);
 
+                ModelAdministrator adminModel = new ModelAdministrator();
+                ControllerAdministrator controllerAdm = new ControllerAdministrator(adminWindow, adminModel);
 
             } else if (id.toUpperCase().startsWith("FUN")) {
                 EmployeeView employeeWindow = new EmployeeView();
@@ -43,6 +50,11 @@ public class ControllerLogin {
                 employeeFrame.setLocationRelativeTo(null);
 
                 employeeFrame.setVisible(true);
+
+
+                EmployeeModel EmpModel = new EmployeeModel();
+                EmployeeController controllerEmp= new EmployeeController(EmpModel);
+
             }
 
             view.dispose();

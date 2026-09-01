@@ -3,7 +3,11 @@ import java.util.*;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.data.LocalDateAdapter;
 import java.time.LocalDate;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Reservation {
     private String id;
     private String activity;

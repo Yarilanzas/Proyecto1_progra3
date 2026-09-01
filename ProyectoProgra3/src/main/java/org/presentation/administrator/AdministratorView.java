@@ -74,6 +74,8 @@ public class AdministratorView  implements PropertyChangeListener {
     private EmployeeModel model;
     private EmployeeController controller;
     private final ReservationQueryService queryService = new ReservationQueryService();
+    private ModelAdministrator modelADM;
+
 
 
     //Atributos administrador
@@ -81,6 +83,9 @@ public class AdministratorView  implements PropertyChangeListener {
 
     public void setModelAdm(ModelAdministrator modelAdm) {
         this.modelAdm = modelAdm;
+        if (this.modelAdm != null) {
+            this.modelAdm.addPropertyChangeListener(this); // Registrar observador de eventos
+        }
     }
 
     private ModelAdministrator modelAdm;
@@ -150,6 +155,11 @@ public class AdministratorView  implements PropertyChangeListener {
                 nombreFuncionarios.setText(curr.getName() == null ? "" : curr.getName());
                 telefono.setText(curr.getPhone() == null ? "" : curr.getPhone());
                 break;
+            case ModelAdministrator.LISTCAT:
+                int[] colum = {CategoryTableModel.ID, CategoryTableModel.DESCRIPCION};
+                table3.setModel(new CategoryTableModel(colum, modelAdm.getList())); // Corregido: modelAdm
+                break;
+
         }
     }
 
@@ -279,7 +289,7 @@ public class AdministratorView  implements PropertyChangeListener {
     private Category takeCategory(){
         Category cat = new Category();
         cat.setId(IdCategoriaFld.getText().trim());
-        cat.setId(DescripcionCategoriaFld.getText().trim());
+        cat.setDescription(DescripcionCategoriaFld.getText().trim());
         return cat;
     }
     /////
