@@ -4,6 +4,7 @@ import com.github.lgooddatepicker.components.DatePicker;
 import org.domain.CalendarData;
 import org.domain.Category;
 import org.domain.Employee;
+import org.logic.CategoryService;
 import org.logic.ReservationQueryService;
 import org.presentation.CalendarTableModel;
 import org.presentation.employee.*;
@@ -14,6 +15,7 @@ import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.time.LocalDate;
+import java.util.List;
 
 
 public class AdministratorView  implements PropertyChangeListener {
@@ -95,8 +97,6 @@ public class AdministratorView  implements PropertyChangeListener {
     }
     ///
 
-
-
     private Employee take(){
         Employee emp = new Employee();
         emp.setId(idfuncionarios.getText().trim());
@@ -106,8 +106,19 @@ public class AdministratorView  implements PropertyChangeListener {
         return emp;
     }
 
-
-
+    //carga categorias en el combo box de calendarizacion
+    private void cargarCategoriasCombo(){
+        try{
+            List<Category> categorias = new CategoryService().findAll();//AGARRA LAS CATEGORIAS
+            DefaultComboBoxModel<Category> modelo = new DefaultComboBoxModel<>();//model combo box
+            for (Category c : categorias){
+                modelo.addElement(c);//recorrelas categorias y las agrega al model
+            }
+            categoriaComboBox.setModel(modelo);//se le asigna
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(getCalendarizacionPanel(),e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
     private boolean validate(){
         boolean valid = true;
@@ -158,7 +169,15 @@ public class AdministratorView  implements PropertyChangeListener {
             case ModelAdministrator.LISTCAT:
                 int[] colum = {CategoryTableModel.ID, CategoryTableModel.DESCRIPCION};
                 table3.setModel(new CategoryTableModel(colum, modelAdm.getList())); // Corregido: modelAdm
+                //Combo box calendarizacion
+                cargarCategoriasCombo();
                 break;
+            case ModelAdministrator.CURRENT:
+                Category catActual = modelAdm.getCurrent();
+                IdCategoriaFld.setText(catActual.getId() == null ? "" : catActual.getId());
+                DescripcionCategoriaFld.setText(catActual.getDescription() == null ? "" : catActual.getDescription());
+                break;
+
 
         }
     }
@@ -270,10 +289,13 @@ public class AdministratorView  implements PropertyChangeListener {
         });
 
         //categoria
+
+        IdCategoriaFld.setEditable(false);
+
         guardarButton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (validateJTextField(IdCategoriaFld) && validateJTextField(DescripcionCategoriaFld) ) {
+                if (validateJTextField(DescripcionCategoriaFld)) {
                     try {
                         controllerAdm.saveCategory(takeCategory());
                     } catch (Exception ex) {
@@ -281,6 +303,15 @@ public class AdministratorView  implements PropertyChangeListener {
                     }
                 } else {
                     JOptionPane.showMessageDialog(JPCategoria, "Espacio vacio, asegurese de ingresar un ID y una decripcion", "Campo Vacío", JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        });
+        table3.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int row = table3.getSelectedRow();
+                if (row >= 0){
+                    controllerAdm.edit(row);
                 }
             }
         });
@@ -292,7 +323,6 @@ public class AdministratorView  implements PropertyChangeListener {
         cat.setDescription(DescripcionCategoriaFld.getText().trim());
         return cat;
     }
-    /////
 
     private boolean validateJTextField(JTextField name) {
         return !name.getText().trim().isEmpty();

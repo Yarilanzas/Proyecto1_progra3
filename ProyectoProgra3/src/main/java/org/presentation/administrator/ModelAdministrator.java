@@ -11,7 +11,7 @@ import java.util.List;
 public class ModelAdministrator extends AbstractModel {
     Category current;
     List<Category> list;
-    public static final String CURRENT = "current";
+    public static final String CURRENT = "currentCategory";
     public static final String LISTCAT = "listCat";
 
 
@@ -40,6 +40,10 @@ public class ModelAdministrator extends AbstractModel {
     public void setList(List<Category> list) {
         this.list = list;
         firePropertyChange(LISTCAT);
+    }
+
+    public Category getCurrent(){
+        return current;
     }
 }
 
