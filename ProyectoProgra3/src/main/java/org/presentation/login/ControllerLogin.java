@@ -46,7 +46,7 @@ public class ControllerLogin {
         // 1. Módulo Funcionarios
         EmployeeModel empModel = new EmployeeModel();
         EmployeeView empView = new EmployeeView();
-        EmployeeController empController = new EmployeeController(empModel);
+        EmployeeController empController = new EmployeeController(empModel,empView);
         tabbedPane.addTab("Funcionarios", empView.getPanel());
 
         // 2. Módulo Categorías

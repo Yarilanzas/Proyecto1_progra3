@@ -7,10 +7,16 @@ import java.util.List;
 
 public class EmployeeController {
     private final EmployeeService service = new EmployeeService();
-    private final EmployeeModel model;
+    private  EmployeeModel model;
+    private  EmployeeView view;
 
-    public EmployeeController(EmployeeModel model) {
+    public EmployeeController(EmployeeModel model, EmployeeView view) {
         this.model = model;
+        this.view = view;
+
+        view.setController(this);
+        view.setModel(model);
+
         list();
     }
 

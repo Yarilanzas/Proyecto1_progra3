@@ -3,6 +3,8 @@ package org.presentation.category;
 import org.domain.Category;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -23,6 +25,12 @@ public class CategoryView implements PropertyChangeListener {
     private CategoryController controller;
 
     public CategoryView() {
+        buscarButton1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
     }
 
     public void setModel(CategoryModel model) {

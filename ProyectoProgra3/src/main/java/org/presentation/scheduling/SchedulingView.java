@@ -1,19 +1,17 @@
 package org.presentation.scheduling;
 
 import com.github.lgooddatepicker.components.DatePicker;
-import org.domain.CalendarData;
 import org.domain.Category;
-import org.logic.ReservationQueryService;
 import org.presentation.CalendarTableModel;
-import org.presentation.resource.ResourceController;
-import org.presentation.resource.ResourceModel;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 import java.time.LocalDate;
 
-public class SchedulingView {
+public class SchedulingView implements PropertyChangeListener{
     private JPanel CalendarizacionPanel;
     private DatePicker fechaPicker;
     private JComboBox categoriaComboBox;
@@ -21,7 +19,9 @@ public class SchedulingView {
     private JTable Calendarizaciontable;
     private JPanel principalPanel;
 
-    private final ReservationQueryService queryService = new ReservationQueryService();
+    private SchedulingModel model;
+    private SchedulingController controller;
+
 
     public SchedulingView() {
         cargarButton.addActionListener(new ActionListener() {
@@ -35,9 +35,7 @@ public class SchedulingView {
                         JOptionPane.showMessageDialog(CalendarizacionPanel,"Seleccione fecha y categoria");
                         return;
                     }
-
-                    CalendarData calendarData = queryService.getCalendar(fecha,categoria);
-                    Calendarizaciontable.setModel(new CalendarTableModel(calendarData));
+                    controller.cargarCalendar(fecha,categoria);
                 } catch (Exception ex){
                     JOptionPane.showMessageDialog(CalendarizacionPanel,ex.getMessage(),"Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -45,15 +43,27 @@ public class SchedulingView {
         });
     }
 
+    @Override
+    public void propertyChange(PropertyChangeEvent evt){
+        switch(evt.getPropertyName()){
+            case SchedulingModel.CATEGORIES:
+                DefaultComboBoxModel<Category> modelo = new DefaultComboBoxModel<>();
+                for (Category c : model.getCategories()){
+                    modelo.addElement(c);
+                }
+                categoriaComboBox.setModel(modelo);
+                break;
+            case SchedulingModel.CALENDAR:
+                if (model.getCalendarData() != null) {
+                    Calendarizaciontable.setModel(new CalendarTableModel(model.getCalendarData()));
+                }
+                break;
+        }
+    }
+
     public JPanel getPanel() {
         return principalPanel;
     }
-
-    private SchedulingModel model;
-    private SchedulingController controller;
-
-
-
     public void setPanel(JPanel panel) {
         this.principalPanel = panel;
     }
@@ -61,7 +71,6 @@ public class SchedulingView {
     public SchedulingController getController() {
         return controller;
     }
-
     public void setController(SchedulingController controller) {
         this.controller = controller;
     }
@@ -69,8 +78,10 @@ public class SchedulingView {
     public SchedulingModel getModel() {
         return model;
     }
-
     public void setModel(SchedulingModel model) {
         this.model = model;
+        if (this.model != null){
+            this.model.addPropertyChangeListener(this);
+        }
     }
 }
