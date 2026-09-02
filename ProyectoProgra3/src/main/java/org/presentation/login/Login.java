@@ -1,5 +1,7 @@
 package org.presentation.login;
 
+import org.domain.User;
+
 import javax.swing.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
@@ -45,6 +47,28 @@ public class Login extends JDialog implements PropertyChangeListener {
                 onCancel();
             }
         });
+
+
+
+        cambiarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (validateJTextField(idtextField1)) {
+                    try {
+                        controller.changePassword(idtextField1.getText() );
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(contentPane, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(contentPane, "Debe ingresar un ID poder cambiar la contraseña", "Campo Vacío", JOptionPane.WARNING_MESSAGE);
+                }
+                /*try {
+                    controller.changePassword(ClaveActualtextField1.getText().trim(), clavetextField.getText().trim());
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(contentPane, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }*/
+            }
+        });
     }
 
     public void setController(ControllerLogin controller) {
@@ -67,6 +91,18 @@ public class Login extends JDialog implements PropertyChangeListener {
     private boolean validateJTextField(JTextField name) {
         return !name.getText().trim().isEmpty();
     }
+   /* public User takeUser(){
+
+        if (validateJTextField(idtextField1)  && validateJTextField(clavetextField)) {
+            try {
+               u.setId(idtextField1.getText());
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(contentPane, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(contentPane, "Debe ingresar un ID y una clave", "Campo Vacío", JOptionPane.WARNING_MESSAGE);
+        }
+    }*/
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {

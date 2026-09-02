@@ -1,11 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <data>
-    <employees/>
-    <administrators/>
+    <employees>
+        <employee>
+            <id>FUN-119790233</id>
+            <password>123456</password>
+            <name>Yariela</name>
+            <phone>86263555</phone>
+        </employee>
+    </employees>
+    <administrators>
+        <administrator>
+            <id>ADM-001</id>
+            <password>12345</password>
+        </administrator>
+    </administrators>
     <categories>
         <category>
             <id>12345</id>
             <description>LAPTOP</description>
+        </category>
+        <category>
+            <id>CAT-012346</id>
+            <description>PROYECTOR</description>
         </category>
     </categories>
     <resources/>

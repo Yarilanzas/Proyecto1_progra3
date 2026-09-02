@@ -9,6 +9,7 @@ import java.io.File;
 import java.util.Objects;
 
 public class LoginService {
+
     private static LoginService theInstance;
 
     public static LoginService instance() {
@@ -20,6 +21,23 @@ public class LoginService {
 
     private LoginService() {
         try {
+            File file = new File("data.xml");
+            System.out.println("Ruta absoluta del XML: " + file.getAbsolutePath());
+            System.out.println("¿Existe el archivo?: " + file.exists());
+
+            data = XMLRepository.instance().load();
+
+            System.out.println("Administradores cargados: " + (data != null && data.getAdministrators() != null ? data.getAdministrators().size() : 0));
+            System.out.println("Funcionarios cargados: " + (data != null && data.getEmployees() != null ? data.getEmployees().size() : 0));
+
+        } catch (Exception e) {
+            System.err.println("Error al cargar la base de datos: " + e.getMessage());
+            e.printStackTrace(); // Imprime la traza completa para ver si falla la lectura XML
+            data = new Data();
+        }
+
+
+        try {
             data = XMLRepository.instance().load();
         } catch (Exception e) {
             System.err.println("Error al cargar la base de datos: " + e.getMessage());
@@ -28,17 +46,17 @@ public class LoginService {
     }
 
     public User read(String id, String password) throws Exception {
-        //System.out.println("Buscando el XML en: " + new File("data.xml").getAbsolutePath());
-        if (id == null || id.isEmpty()) {
+        if (id == null || id.trim().isEmpty()) {
             throw new Exception("EL ESPACIO DEL ID DEBE DE ESTAR COMPLETO");
         }
 
-        String idUpper = id.toUpperCase();
+        String idClean = id.trim();
+        String idUpper = idClean.toUpperCase();
         User result = null;
 
         if (idUpper.startsWith("ADM")) {
             result = data.getAdministrators().stream()
-                    .filter(i -> i.getId().equals(id))
+                    .filter(i -> i.getId() != null && i.getId().equalsIgnoreCase(idClean))
                     .findFirst()
                     .orElse(null);
 
@@ -48,7 +66,7 @@ public class LoginService {
 
         } else if (idUpper.startsWith("FUN")) {
             result = data.getEmployees().stream()
-                    .filter(i -> i.getId().equals(id))
+                    .filter(i -> i.getId() != null && i.getId().equalsIgnoreCase(idClean))
                     .findFirst()
                     .orElse(null);
 
@@ -57,7 +75,7 @@ public class LoginService {
             }
 
         } else {
-            throw new Exception("El id debe iniciar con su distintivo");
+            throw new Exception("El id debe iniciar con su distintivo (ADM o FUN)");
         }
 
         if (!result.getPassword().equals(password)) {
