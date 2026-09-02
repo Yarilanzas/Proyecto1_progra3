@@ -1,4 +1,5 @@
-package org.presentation.employee;
+package org.presentation.employees;
+
 import org.domain.Employee;
 import org.presentation.AbstractTableModel;
 
@@ -20,12 +21,10 @@ public class EmployeeTableModel extends AbstractTableModel<Employee> {
         colNames[ID] = "Id";
         colNames[NOMBRE] = "Nombre";
         colNames[TELEFONO] = "Telefono";
-
     }
 
     @Override
-    protected Object getPropertyAt(Employee e, int col)
-    {
+    protected Object getPropertyAt(Employee e, int col) {
         switch(cols[col]){
             case ID: return e.getId();
             case NOMBRE: return e.getName();

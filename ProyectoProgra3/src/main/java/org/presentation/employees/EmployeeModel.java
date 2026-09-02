@@ -1,4 +1,4 @@
-package org.presentation.employee;
+package org.presentation.employees;
 
 import org.domain.Employee;
 import org.presentation.AbstractModel;
@@ -6,7 +6,7 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EmployeeModel extends AbstractModel{
+public class EmployeeModel extends AbstractModel {
     public static final String LIST = "list";
     public static final String CURRENT = "current";
 

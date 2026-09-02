@@ -1,4 +1,4 @@
-package org.presentation.employee;
+package org.presentation.employees;
 
 import org.domain.Employee;
 import org.logic.EmployeeService;
@@ -37,7 +37,7 @@ public class EmployeeController {
             if (porid){
                 Employee e = service.findById(txt);
                 model.setList(e != null ? List.of(e) : List.of());
-            }else{
+            } else {
                 model.setList(txt.isEmpty() ? service.findAll() : service.findByName(txt));
             }
         } catch (Exception e) {

@@ -1,5 +1,5 @@
 package org.main;
-import org.presentation.administrator.AdministratorView;
+//import org.presentation.administrator.AdministratorView;
 import org.presentation.login.ControllerLogin;
 import org.presentation.login.Login;
 import org.presentation.login.ModelLogin;
@@ -7,8 +7,7 @@ import org.presentation.login.ModelLogin;
 import javax.swing.*;
 import java.awt.*;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+
 public class Main {
     public static void main(String[] args) {
         Login login = new Login();
