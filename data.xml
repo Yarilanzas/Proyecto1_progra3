@@ -7,6 +7,12 @@
             <name>Yariela</name>
             <phone>86263555</phone>
         </employee>
+        <employee>
+            <id>FUN-001</id>
+            <password>123456</password>
+            <name>Saul</name>
+            <phone>98989898</phone>
+        </employee>
     </employees>
     <administrators>
         <administrator>

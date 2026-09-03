@@ -52,10 +52,59 @@ public class CategoryView implements PropertyChangeListener {
             }
         });
 
-        buscarButton1.addActionListener(new ActionListener() {
+
+        borrarButton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                String id = idCategoriaFld.getText().trim();
+                if (id.isEmpty()){
+                    JOptionPane.showMessageDialog(principalPanel,"Debe ingresar el id para borrar");
+                    return;
+                }
+                int confirm = JOptionPane.showConfirmDialog(principalPanel,"Seguro/a que desea borrar la categoria " + id + "?",
+                        "Confirmar", JOptionPane.YES_NO_OPTION);
+                if (confirm != JOptionPane.YES_OPTION) return;
+                try{
+                    controller.delete(id);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(principalPanel, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
 
+        });
+        limpiarButton1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.clear();
+            }
+        });
+        buscarButton1.addActionListener(new ActionListener() {
+            @Override
+                public void actionPerformed(ActionEvent e) {
+                    String descripcion = (descripcionFld.getText().trim()).toUpperCase();
+
+                    if (descripcion.isEmpty()){
+                        JOptionPane.showMessageDialog(principalPanel,"Debe una descripcion");
+                        return;
+                    }else {
+                        controller.searchDesc(descripcion);
+                    }
+
+
+                    if (model.getList().isEmpty()){
+                        JOptionPane.showMessageDialog(principalPanel,"No se encontro ninguna categoria con esa descripcion");
+                    }
+
+            }
+        });
+        imprimirButton1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    controller.print();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(principalPanel, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
             }
         });
     }

@@ -20,6 +20,15 @@ public class CategoryService {
                (c -> c.getId().equals(id))
                .findFirst().orElse(null);
     }
+    public Category findByDesc(String des)throws Exception{
+        Data data = XMLRepository.instance().load();
+        for (Category e : data.getCategories()){
+            if (e.getDescription().equals(des)){
+                return e;
+            }
+        }
+        return null;
+    }
 
     public List<Category> findByDescription(String descripcion) throws Exception{
         Data data = XMLRepository.instance().load();
