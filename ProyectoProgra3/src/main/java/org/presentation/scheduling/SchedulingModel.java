@@ -24,7 +24,6 @@ public class SchedulingModel extends AbstractModel {
     public void addPropertyChangeListener(PropertyChangeListener listener){
         super.addPropertyChangeListener(listener);
         firePropertyChange(CATEGORIES);
-        //firePropertyChange(CALENDAR);
     }
 
     public List<Category> getCategories() { return categories; }

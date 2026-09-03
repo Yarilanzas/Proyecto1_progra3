@@ -1,4 +1,4 @@
-package org.presentation;
+package org.presentation.scheduling;
 
 import org.domain.CalendarData;
 import org.domain.Resource;

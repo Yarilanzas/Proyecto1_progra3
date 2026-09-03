@@ -2,7 +2,6 @@ package org.presentation.scheduling;
 
 import com.github.lgooddatepicker.components.DatePicker;
 import org.domain.Category;
-import org.presentation.CalendarTableModel;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

@@ -6,12 +6,6 @@ import org.presentation.resource.ResourceModel;
 import javax.swing.*;
 
 public class StatisticsView {
-    private JTextField desdeFld;
-    private JTextField hastaFld;
-    private JButton button2;
-    private JTextField desdeAFld;
-    private JButton button3;
-    private JTextField hastaAFld;
     private JButton cargarButtonA;
     private JTable table2;
     private JPanel panel;
