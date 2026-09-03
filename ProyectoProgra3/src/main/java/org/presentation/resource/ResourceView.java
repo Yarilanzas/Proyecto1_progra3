@@ -4,6 +4,8 @@ import org.presentation.category.CategoryController;
 import org.presentation.category.CategoryModel;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class ResourceView {
     private JButton imprimirButton2;
@@ -23,6 +25,15 @@ public class ResourceView {
     private ResourceModel model;
     private ResourceController controller;
 
+
+    public ResourceView() {
+        comboBox1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+    }
 
     public JPanel getPanel() {
         return principalPanel;
