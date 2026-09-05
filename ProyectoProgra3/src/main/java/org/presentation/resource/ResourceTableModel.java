@@ -1,6 +1,5 @@
 package org.presentation.resource;
 
-import org.domain.Category;
 import org.domain.Resource;
 import org.presentation.AbstractTableModel;
 

@@ -1,15 +1,22 @@
 package org.presentation.statistics;
 
-import org.presentation.resource.ResourceController;
-import org.presentation.resource.ResourceModel;
+import com.github.lgooddatepicker.components.DatePicker;
 
 import javax.swing.*;
 
 public class StatisticsView {
     private JButton cargarButtonA;
-    private JTable table2;
+    private JTable tableActividades;
     private JPanel panel;
     private JPanel principalPanel;
+    private DatePicker desdeRecursos;
+    private DatePicker hastaRecursos;
+    private JButton cargarButton;
+    private DatePicker desdeActividades;
+    private DatePicker hastaActividades;
+    private JTable tableCategorias;
+    private JPanel graficoRecursos;
+    private JPanel graficoActividades;
 
     private StatisticsModel model;
     private StatisticsController controller;

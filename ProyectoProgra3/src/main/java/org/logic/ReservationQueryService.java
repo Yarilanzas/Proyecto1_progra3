@@ -1,7 +1,19 @@
+/*Este service es especifico ante cualquier consulta que tenga que ver con una reservacion
+ya hecha, o sea  basicamente agrupar todas las consultas sobre una reserva en un service, en vez
+de hacerlas todas separadas, o sea como en calendarizacion, actividades, estadisiticas
+
+son solo distintas formas de leer y resumir los mismos datos de Reservation/DetailReservation.
+Como los 4 métodos (getCalendar, getWeeklySchedule, getResourceStatistics, getActivityStatistics)
+leen exactamente la misma fuente de datos, tenerlos juntos evita duplicar el data.getReservations()
+en 4 archivos distintos sin necesidad real de separarlos.
+*/
+
 package org.logic;
 
 import org.data.*;
 import org.domain.*;
+import org.presentation.statistics.CategoryStatistics;
+import org.presentation.statistics.ActivityStatistics;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -9,6 +21,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 import java.time.DayOfWeek;
+
+
 
 public class ReservationQueryService {
     private static final String[] HORAS = {"06:00","07:00","08:00","09:00","10:00",
@@ -79,5 +93,57 @@ public class ReservationQueryService {
             }
         }
             return new ActivityData(dias, horas,celdas);
+    }
+
+
+    public List <CategoryStatistics> getResourceStatistics(LocalDate desde, LocalDate hasta) throws Exception{
+        Data data = XMLRepository.instance().load();
+
+        List<CategoryStatistics> estadisticas = new ArrayList<>();
+        for (Category c : data.getCategories()){
+            estadisticas.add(new CategoryStatistics(c,0));
+        }
+
+        for (Reservation reserva : data.getReservations()){
+            if (!"ACTIVA".equals(reserva.getStatus())) continue;
+            if (reserva.getDate().isBefore(desde) || reserva.getDate().isAfter(hasta)) continue;
+
+            for (DetailReservation detalle : reserva.getDetails()){
+                String categoriaId = detalle.getAssignedResource().getCategory().getId();
+
+                for (CategoryStatistics ce: estadisticas){
+                    if (ce.getCategory().getId().equals(categoriaId)){
+                        ce.setCantidad(ce.getCantidad() + 1);
+                    }
+                }
+            }
+        }
+        return estadisticas;
+    }
+
+    public List<ActivityStatistics> getActivityStatistics(LocalDate desde, LocalDate hasta) throws Exception{
+        Data data = XMLRepository.instance().load();
+
+        List<ActivityStatistics> estadisticas = new ArrayList<>();
+        List<LocalDate> fechas = new ArrayList<>();
+
+        LocalDate lunes = desde.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        for (LocalDate date = lunes; !date.isAfter(hasta); date = date.plusDays(7)){
+            estadisticas.add(new ActivityStatistics(date.toString(),0));
+        }
+
+        data.getReservations().stream()
+            .filter(r -> "ACTIVA".equals(r.getStatus()))
+            .filter(r -> !r.getDate().isBefore(desde) && !r.getDate().isAfter(hasta))
+            .forEach(r -> {
+                for (int i = fechas.size() - 1; i>=0; i--){
+                    if (!r.getDate().isBefore(fechas.get(i))){
+                        ActivityStatistics actividad = estadisticas.get(i);
+                        actividad.setCantidad(actividad.getCantidad() + 1);
+                        break;
+                    }
+                }
+            });
+        return estadisticas;
     }
 }
