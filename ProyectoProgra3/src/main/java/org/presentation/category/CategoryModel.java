@@ -42,5 +42,6 @@ public class CategoryModel extends AbstractModel {
         super.addPropertyChangeListener(listener);
         firePropertyChange(CURRENT);
         firePropertyChange(LIST);
+
     }
 }

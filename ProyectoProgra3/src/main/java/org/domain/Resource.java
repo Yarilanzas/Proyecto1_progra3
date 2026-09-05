@@ -33,4 +33,16 @@ public class Resource {
     public String getId() {
         return id;
     }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 }

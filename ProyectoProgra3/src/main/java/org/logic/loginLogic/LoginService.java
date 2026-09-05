@@ -29,6 +29,8 @@ public class LoginService {
 
             System.out.println("Administradores cargados: " + (data != null && data.getAdministrators() != null ? data.getAdministrators().size() : 0));
             System.out.println("Funcionarios cargados: " + (data != null && data.getEmployees() != null ? data.getEmployees().size() : 0));
+            System.out.println("Recursos cargados: " + (data != null && data.getResources() != null ? data.getResources().size() : 0));
+
 
         } catch (Exception e) {
             System.err.println("Error al cargar la base de datos: " + e.getMessage());

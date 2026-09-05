@@ -1,5 +1,6 @@
 package org.presentation.reservations;
 
+import org.logic.ReservationQueryService;
 import org.presentation.resource.ResourceModel;
 import org.presentation.resource.ResourceView;
 
@@ -7,7 +8,7 @@ import org.presentation.resource.ResourceView;
 public class ReservationController {
     private ReservationView view;
     private ReservationModel model;
-    //private final CategoryService categoryService = new CategoryService();
+    private final ReservationQueryService queryService = new ReservationQueryService();
 
     public ReservationController(ReservationView view, ReservationModel model) {
         this.view = view;
@@ -17,4 +18,6 @@ public class ReservationController {
         view.setModel(model);
 
     }
+
+
 }

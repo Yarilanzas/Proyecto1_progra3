@@ -1,5 +1,6 @@
 package org.presentation.reservations;
 
+import com.github.lgooddatepicker.components.DatePicker;
 import org.presentation.resource.ResourceController;
 import org.presentation.resource.ResourceModel;
 
@@ -10,7 +11,6 @@ public class ReservationView {
     private JPanel Panel;
     private JTextField frasetextField;
     private JTextField ActividadtextField1;
-    private JTextField FechatextField1;
     private JTextField horainiciotextField1;
     private JTextField horaFinaltextField1;
     private JButton extraerButton;
@@ -24,6 +24,7 @@ public class ReservationView {
     private JTable table1;
     private JButton imprimirButton1;
     private JPanel PrincipalPanel;
+    private DatePicker datePicker;
 
     public ReservationView() {
     }

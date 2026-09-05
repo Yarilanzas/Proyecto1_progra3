@@ -1,10 +1,8 @@
 package org.presentation.resource;
 
-import org.domain.Category;
+import org.domain.Resource;
 import org.logic.CategoryService;
 import org.logic.ResourceService;
-import org.presentation.category.CategoryModel;
-import org.presentation.category.CategoryView;
 
 import javax.swing.*;
 import java.util.List;
@@ -13,7 +11,7 @@ import java.util.List;
 public class ResourceController {
     private ResourceView view;
     private ResourceModel model;
-    private final ResourceService resourceServiceService = new ResourceService();
+    private final ResourceService resourceService = new ResourceService();
     private final CategoryService categoryService = new CategoryService();
 
 
@@ -29,8 +27,8 @@ public class ResourceController {
 
     public void searchbyDescription(String desc) {
         try{
-            Category c= categoryService.findByDesc(desc);
-            model.setCategories(c != null ? List.of(c) : List.of());
+            Resource c= resourceService.findByDesc(desc);
+            model.setResources(c != null ? List.of(c) : List.of());
         }catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -43,6 +41,17 @@ public class ResourceController {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+    public void saveResource(Resource r){
+        try{
+            resourceService.save(r);
+
+        }
+        catch (Exception e) {
+        JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    }
+
+
 }
 
 

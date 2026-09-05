@@ -11,19 +11,26 @@ import java.util.List;
 public class ResourceModel extends AbstractModel {
     Resource current;
     List<Category> categories;
+    List<Resource> resources;
 
 
     public static final String CATEGORIES = "categories";
     public static final String CURRENT= "current";
+    public static final String RESOURCES= "resources";
+
 
     public ResourceModel() {
         current = new Resource();
         categories = new ArrayList<Category>();
+        resources = new ArrayList<Resource>();
+
     }
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         super.addPropertyChangeListener(listener);
         firePropertyChange(CURRENT);
         firePropertyChange(CATEGORIES);
+        firePropertyChange(RESOURCES);
+
     }
 
     public Resource getCurrent() {
@@ -44,7 +51,14 @@ public class ResourceModel extends AbstractModel {
         firePropertyChange(CATEGORIES);
     }
 
+    public List<Resource> getResources() {
+        return resources;
+    }
 
+    public void setResources(List<Resource> resources) {
+        this.resources = resources;
+        firePropertyChange(RESOURCES);
+    }
 
 
 

@@ -40,6 +40,6 @@ public class Category {
 
     @Override
     public String toString(){
-        return id;
+        return description;
     }
 }

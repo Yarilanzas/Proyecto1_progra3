@@ -116,7 +116,7 @@ public class CategoryView implements PropertyChangeListener {
     private Category takeCategory() {
         Category cat = new Category();
         cat.setId(idCategoriaFld.getText().trim());
-        cat.setDescription(descripcionCategoriaFld.getText().trim());
+        cat.setDescription(descripcionCategoriaFld.getText().trim().toUpperCase());
         return cat;
     }
 
