@@ -8,9 +8,9 @@ import java.util.List;
 
 public class ResourceService {
 
-    public List<Category> findAllCategories() throws Exception{
+   /* public List<Category> findAllCategories() throws Exception{
         Data data = XMLRepository.instance().load();
         return data.getCategories();
-    }
+    }*/
 
 }

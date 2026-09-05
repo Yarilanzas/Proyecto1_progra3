@@ -1,16 +1,18 @@
 package org.presentation.resource;
 
-import org.presentation.category.CategoryController;
+import org.domain.Category;
 import org.presentation.category.CategoryModel;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
-public class ResourceView {
+public class ResourceView implements PropertyChangeListener {
     private JButton imprimirButton2;
     private JButton buscarButton2;
-    private JComboBox comboBox1;
+    private JComboBox comboBoxCategorias;
     private JTextField textField4;
     private JTextField textField1;
     private JTextField textField2;
@@ -27,11 +29,31 @@ public class ResourceView {
 
 
     public ResourceView() {
-        comboBox1.addActionListener(new ActionListener() {
+        comboBoxCategorias.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
             }
+        });
+        buscarButton2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String descripcion = (textField4.getText().trim()).toUpperCase();
+
+                if (descripcion.isEmpty()){
+                    JOptionPane.showMessageDialog(principalPanel,"Debe una descripcion");
+                    return;
+                }else {
+                    controller.searchbyDescription(descripcion);
+                }
+
+
+                if (model.getCategories().isEmpty()){
+                    JOptionPane.showMessageDialog(principalPanel,"No se encontro ninguna categoria con esa descripcion");
+                }
+
+            }
+
         });
     }
 
@@ -57,7 +79,25 @@ public class ResourceView {
 
     public void setModel(ResourceModel model) {
         this.model = model;
+        this.model.addPropertyChangeListener(this);
     }
 
+    public void propertyChange(PropertyChangeEvent evt) {
+        switch (evt.getPropertyName()) {
+            case ResourceModel.CATEGORIES:
+                DefaultComboBoxModel<Category> modelo = new DefaultComboBoxModel<>();
+                for (Category c : model.getCategories()){
+                    modelo.addElement(c);
+                }
+                comboBoxCategorias.setModel(modelo);
+                break;
+           /* case ResourceModel.CURRENT:
+                Category curr = model.getCurrent();
+                textField4.setText(curr.getId() == null ? "" : curr.getId());
+                descripcionCategoriaFld.setText(curr.getDescription() == null ? "" : curr.getDescription());
+                break;*/
+        }
+        this.principalPanel.revalidate();
+    }
 }
 
