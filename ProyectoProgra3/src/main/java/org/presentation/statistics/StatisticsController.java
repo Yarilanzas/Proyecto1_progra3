@@ -2,7 +2,6 @@ package org.presentation.statistics;
 
 import org.logic.ReservationQueryService;
 import java.time.LocalDate;
-import java.util.List;
 
 
 public class StatisticsController {
