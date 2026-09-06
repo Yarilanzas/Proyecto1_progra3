@@ -108,6 +108,16 @@ public class ResourceView implements PropertyChangeListener {
                 }
             }
         });
+        imprimirButton2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try{
+                    controller.print();
+                }catch (Exception ex) {
+                    JOptionPane.showMessageDialog(principalPanel, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
     }
     public Resource takeResoruce(){
         Resource r= new Resource();
