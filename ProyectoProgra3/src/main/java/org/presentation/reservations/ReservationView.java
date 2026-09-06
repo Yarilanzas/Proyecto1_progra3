@@ -1,10 +1,13 @@
 package org.presentation.reservations;
 
 import com.github.lgooddatepicker.components.DatePicker;
+import org.domain.Reservation;
 import org.presentation.resource.ResourceController;
 import org.presentation.resource.ResourceModel;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.net.URL;
 
 public class ReservationView {
@@ -27,6 +30,13 @@ public class ReservationView {
     private DatePicker datePicker;
 
     public ReservationView() {
+        limpiarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Reservation r= new Reservation();
+                //model.setCurrent(r);
+            }
+        });
     }
     private ReservationModel model;
     private ReservationController controller;
