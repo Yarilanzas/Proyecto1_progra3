@@ -1,5 +1,6 @@
 package org.presentation.resource;
 
+import org.domain.Category;
 import org.domain.Resource;
 import org.logic.CategoryService;
 import org.logic.ResourceService;
@@ -22,17 +23,28 @@ public class ResourceController {
         view.setController(this);
         view.setModel(model);
         cargarCategorias();
+        list();
 
     }
 
-    public void searchbyDescription(String desc) {
-        try{
-            Resource c= resourceService.findByDesc(desc);
-            model.setResources(c != null ? List.of(c) : List.of());
-        }catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+    public void searchbyCategory(String cat) {
+        try {
+            List<Resource> list = resourceService.findByCategory(cat);
+            model.setResources(list);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
+    public void searchbyDes(String desc) {
+        try {
+            List<Resource> list = resourceService.findByDesc(desc);
+            model.setResources(list);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
 
     public void cargarCategorias() {
         try {
@@ -44,6 +56,7 @@ public class ResourceController {
     public void saveResource(Resource r){
         try{
             resourceService.save(r);
+            model.setResources(resourceService.findAllResources());
 
         }
         catch (Exception e) {
@@ -51,7 +64,31 @@ public class ResourceController {
     }
     }
 
+    public void clear(){
+        model.setCurrent(new Resource());
+    }
 
+    public void delete(String id){
+        try{
+            resourceService.delete(id);
+            list();
+            model.setCurrent(new Resource());
+
+        }catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    public void list() {
+        try {
+            model.setResources(resourceService.findAllResources());
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+    public void edit(int row) {
+        Resource re = model.getResources().get(row);
+        model.setCurrent(re);
+    }
 }
 
 

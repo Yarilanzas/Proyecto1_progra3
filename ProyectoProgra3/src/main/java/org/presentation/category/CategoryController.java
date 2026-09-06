@@ -90,6 +90,15 @@ public class CategoryController {
         }
     }
 
+    /*public void searchById(String id) {
+        try{
+            Category c= categoryService.findByDesc(desc);
+            model.setList(c != null ? List.of(c) : List.of());
+        }catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }*/
+
     public void print() throws Exception {
         String dest = "categorias.pdf";
         PdfFont font = PdfFontFactory.createFont(StandardFonts.HELVETICA);

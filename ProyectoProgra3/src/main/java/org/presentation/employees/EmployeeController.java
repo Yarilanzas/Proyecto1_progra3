@@ -38,9 +38,9 @@ public class EmployeeController {
         model.setCurrent(model.getList().get(row));
     }
 
-    public void search(String txt, boolean porid) {
+    public void search(String txt, boolean porId) {
         try {
-            if (porid){
+            if (porId){
                 Employee e = service.findById(txt);
                 model.setList(e != null ? List.of(e) : List.of());
             } else {

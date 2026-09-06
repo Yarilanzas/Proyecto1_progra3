@@ -84,7 +84,7 @@ public class CategoryView implements PropertyChangeListener {
                     String descripcion = (descripcionFld.getText().trim()).toUpperCase();
 
                     if (descripcion.isEmpty()){
-                        JOptionPane.showMessageDialog(principalPanel,"Debe una descripcion");
+                        JOptionPane.showMessageDialog(principalPanel,"Debe ingresar una descripcion");
                         return;
                     }else {
                         controller.searchDesc(descripcion);

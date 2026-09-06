@@ -29,7 +29,7 @@ public class ResourceTableModel extends AbstractTableModel<Resource> {
     protected Object getPropertyAt(Resource re, int col) {
         switch (cols[col]) {
             case ID: return re.getId();
-            case CATEGORIA: re.getCategory();
+            case CATEGORIA: return re.getCategory();
             case DESCRIPCION: return re.getDescription();
             default: return null;
         }
