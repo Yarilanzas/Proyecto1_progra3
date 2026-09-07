@@ -40,6 +40,8 @@ public class ReservationController {
         try {
             List<Category> list = categoryService.findAll();
             model.setCategories(list);
+            List<Reservation> listRE = reservationService.findAllResources();
+            model.setReservations(listRE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -49,8 +51,29 @@ public class ReservationController {
         model.setCurrent(r);
     }
 
-    public void saveReservation(Reservation r)throws Exception {
-        reservationService.save(r);
+    public void saveReservation(Reservation r, List<Category> categorias) throws Exception {
+        reservationService.save(r, categorias);
+
+        model.setReservations(reservationService.findAllResources());
+        clear();
+    }
+    public void cancelReservation(String id) throws Exception {
+        reservationService.cancel(id);
+        model.setReservations(reservationService.findAllResources());
+        clear();
     }
 
+    public void delete(String id)throws Exception{
+        reservationService.delete(id);
+        list();
+        model.setCurrent(new Reservation());
+    }
+
+    public void list() {
+        try {
+            model.setReservations(reservationService.findAllResources());
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
 }

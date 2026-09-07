@@ -30,18 +30,18 @@ public class CategoryView implements PropertyChangeListener {
         guardarButton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (validateJTextField(descripcionCategoriaFld) && validateJTextField(idCategoriaFld)) {
+                // SOLO validamos que la descripción no esté vacía
+                if (validateJTextField(descripcionCategoriaFld)) {
                     try {
                         controller.saveCategory(takeCategory());
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(principalPanel, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 } else {
-                    JOptionPane.showMessageDialog(principalPanel, "Espacio vacio, asegurese de ingresar un ID y una decripcion", "Campo Vacío", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(principalPanel, "Asegúrese de ingresar una descripción", "Campo Vacío", JOptionPane.WARNING_MESSAGE);
                 }
             }
         });
-
         tableCategories.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -107,6 +107,7 @@ public class CategoryView implements PropertyChangeListener {
             }
             }
         });
+        idCategoriaFld.setEditable(false);
     }
 
     private boolean validateJTextField(JTextField field) {

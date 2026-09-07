@@ -5,6 +5,7 @@ import org.domain.Resource;
 import org.presentation.AbstractTableModel;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ReservationTableModel extends AbstractTableModel<Reservation> {
     public static final int ID = 0;
@@ -39,7 +40,14 @@ public class ReservationTableModel extends AbstractTableModel<Reservation> {
                 String inicio = (re.getStartTime() != null) ? re.getStartTime() : "";
                 String fin = (re.getEndTime() != null) ? re.getEndTime() : "";
                 return inicio + " - " + fin;
-            case RECURSO: return re.getResource();
+            case RECURSO:
+                if (re.getResources() != null && !re.getResources().isEmpty()) {
+                    // Une los IDs de los recursos separados por coma
+                    return re.getResources().stream()
+                            .map(Resource::getId)
+                            .collect(Collectors.joining(", "));
+                }
+                return "Sin Recursos";
             case ESTADO: return re.getStatus();
             default: return null;
         }

@@ -12,13 +12,19 @@ public class Reservation {
     private String id;
     private String activity;
     private Employee employee;
-    private Resource resource;
-
-
+    private List<Resource> resources = new ArrayList<>();
 
     private Category category;
     @XmlJavaTypeAdapter(LocalDateAdapter.class)
     private LocalDate date;
+
+    public List<Resource> getResources() {
+        return resources;
+    }
+
+    public void setResources(List<Resource> resources) {
+        this.resources = resources;
+    }
 
     private String startTime;
     private String status; // estos dos no se si son strings
@@ -37,13 +43,6 @@ public class Reservation {
         this.employee = employee;
     }
 
-    public Resource getResource() {
-        return resource;
-    }
-
-    public void setResource(Resource resource) {
-        this.resource = resource;
-    }
 
     public List<DetailReservation> getDetails() {
         return details;

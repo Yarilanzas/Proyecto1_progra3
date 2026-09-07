@@ -38,19 +38,22 @@ public class CategoryService {
                         .collect(Collectors.toList());
     }
 
-    public void save(Category categoria) throws Exception{
+    public void save(Category categoria) throws Exception {
         Data data = XMLRepository.instance().load();
-        Category existe = data.getCategories().stream().filter
-                        (c -> c.getId().equals(categoria.getId()))
-                .findFirst().orElse(null);
 
-        if (existe != null){
-            data.getCategories().remove(existe);
-        }else{
+        Category existe = (categoria.getId() != null && !categoria.getId().isEmpty())
+                ? data.getCategories().stream()
+                .filter(c -> c.getId().equals(categoria.getId()))
+                .findFirst().orElse(null)
+                : null;
+
+        if (existe != null) {
+            existe.setDescription(categoria.getDescription());
+        } else {
             categoria.setId(generarId(data.getCategories()));
+            data.getCategories().add(categoria);
         }
 
-        data.getCategories().add(categoria);
         XMLRepository.instance().store(data);
     }
 
