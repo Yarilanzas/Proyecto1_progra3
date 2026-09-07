@@ -12,7 +12,11 @@ public class Reservation {
     private String id;
     private String activity;
     private Employee employee;
+    private Resource resource;
 
+
+
+    private Category category;
     @XmlJavaTypeAdapter(LocalDateAdapter.class)
     private LocalDate date;
 
@@ -33,10 +37,24 @@ public class Reservation {
         this.employee = employee;
     }
 
+    public Resource getResource() {
+        return resource;
+    }
+
+    public void setResource(Resource resource) {
+        this.resource = resource;
+    }
+
     public List<DetailReservation> getDetails() {
         return details;
     }
+    public Category getCategory() {
+        return category;
+    }
 
+    public void setCategory(Category category) {
+        this.category = category;
+    }
     public String getId() {
         return id;
     }
