@@ -2,9 +2,7 @@ package org.presentation.reservations;
 
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.TimePicker;
-import org.domain.Category;
-import org.domain.ReservaExtraccion;
-import org.domain.Reservation;
+import org.domain.*;
 import org.presentation.category.CategoryTableModel;
 
 import javax.swing.*;
@@ -291,6 +289,17 @@ public class ReservationView {
 
         if (categoriasSeleccionadas.isEmpty()) {
             throw new Exception("Debe seleccionar al menos una categoría de la tabla.");
+        }
+        if (org.domain.UserSession.getInstance().isLoggedIn()) {
+            User usuarioActual = org.domain.UserSession.getInstance().getCurrentUser();
+
+            if (usuarioActual instanceof Employee) {
+                r.setEmployee((Employee) usuarioActual);
+            } else {
+                throw new Exception("El usuario en sesión no es un funcionario");
+            }
+        } else {
+            throw new Exception("No hay ningún funcionario en sesión activa.");
         }
 
         return r;

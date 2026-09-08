@@ -31,6 +31,8 @@ public class ControllerLogin {
         try {
             User user = LoginService.instance().read(id, password);
 
+            org.domain.UserSession.getInstance().login(user);
+
             model.setCurrent(user);
 
             String idUpper = user.getId().toUpperCase();
@@ -60,6 +62,7 @@ public class ControllerLogin {
         frameChangePassword.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         frameChangePassword.setVisible(true);
     }
+
 
 
 
@@ -110,6 +113,7 @@ public class ControllerLogin {
         adminFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         adminFrame.setVisible(true);
     }
+
 
     private void buildEmployeeWindow() {
         JFrame employeeFrame = new JFrame("Panel de Funcionario");
