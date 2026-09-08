@@ -3,6 +3,7 @@ package org.presentation.reservations;
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.TimePicker;
 import org.domain.Category;
+import org.domain.ReservaExtraccion;
 import org.domain.Reservation;
 import org.presentation.category.CategoryTableModel;
 
@@ -111,6 +112,68 @@ public class ReservationView {
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(PrincipalPanel, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                     }
+                }
+            }
+        });
+        imprimirButton1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try{
+                    controller.print();
+                }catch (Exception ex) {
+                    JOptionPane.showMessageDialog(PrincipalPanel, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        extraerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    String frase = frasetextField.getText();
+                    if (frase == null || frase.trim().isEmpty()) {
+                        JOptionPane.showMessageDialog(PrincipalPanel, "Ingrese una frase para extraer la información.", "Atención", JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+
+                    ReservaExtraccion datos = controller.extraerDeFrase(frase);
+
+                    if (datos != null) {
+                        // Rellenar campos de la interfaz gráfica automáticamente
+                        if (datos.getActividad() != null) {
+                            ActividadtextField1.setText(datos.getActividad());
+                        }
+
+                        if (datos.getFecha() != null) {
+                            datePicker.setDate(java.time.LocalDate.parse(datos.getFecha()));
+                        }
+
+                        if (datos.getHoraInicio() != null) {
+                            horaInicio.setTime(LocalTime.parse(datos.getHoraInicio()));
+                        }
+
+                        if (datos.getHoraFinal() != null) {
+                            horaFin.setTime(LocalTime.parse(datos.getHoraFinal()));
+                        }
+
+                        // Seleccionar las categorías extraídas en la JTable
+                        if (datos.getCategoriasRecurso() != null && !datos.getCategoriasRecurso().isEmpty()) {
+                            categoriastable2.clearSelection();
+                            categoriasSeleccionadas.clear();
+
+                            List<Category> categoriasSistema = model.getCategories();
+                            for (int i = 0; i < categoriasSistema.size(); i++) {
+                                Category cat = categoriasSistema.get(i);
+                                if (datos.getCategoriasRecurso().contains(cat.getDescription())) {
+                                    categoriastable2.addRowSelectionInterval(i, i);
+                                    categoriasSeleccionadas.add(cat);
+                                }
+                            }
+                        }
+
+                        JOptionPane.showMessageDialog(PrincipalPanel, "Datos extraídos exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(PrincipalPanel, "Error al extraer datos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });

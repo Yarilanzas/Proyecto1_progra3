@@ -1,8 +1,11 @@
 package org.logic;
 
+import dev.langchain4j.model.openai.OpenAiChatModel;
+import dev.langchain4j.service.AiServices;
 import org.data.Data;
 import org.data.XMLRepository;
 import org.domain.Category;
+import org.domain.ReservaExtraccion;
 import org.domain.Reservation;
 import org.domain.Resource;
 
@@ -83,6 +86,23 @@ public class ReservationService {
     public List<Reservation> findAllResources() throws Exception{
         Data data = XMLRepository.instance().load();
         return data.getReservations();
+    }
+    public ReservaExtraccion extraerReserva(String frase) throws Exception {
+        Data data = XMLRepository.instance().load();
+
+        String listaCategorias = data.getCategories().stream()
+                .map(Category::getDescription)
+                .collect(Collectors.joining(", "));
+
+        OpenAiChatModel aiModel = OpenAiChatModel.builder()
+                .baseUrl("http://langchain4j.dev/demo/openai/v1")
+                .apiKey("demo")
+                .modelName("gpt-4o-mini")
+                .build();
+
+        ReservaExtractorService aiService = AiServices.create(ReservaExtractorService.class, aiModel);
+
+        return aiService.extraer(frase, listaCategorias, LocalTime.now().toString());
     }
     public void delete(String id) throws Exception {
         Data data = XMLRepository.instance().load();
