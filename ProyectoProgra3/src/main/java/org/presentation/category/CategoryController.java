@@ -20,6 +20,8 @@ import org.bouncycastle.jcajce.provider.symmetric.DES;
 import org.domain.Category;
 import org.domain.Employee;
 import org.logic.CategoryService;
+import org.logic.ResourceService;
+import org.presentation.resource.ResourceController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,6 +32,7 @@ public class CategoryController {
     private CategoryView view;
     private CategoryModel model;
     private final CategoryService categoryService = new CategoryService();
+   // private final ResourceController resourceController = new ResourceController();
 
     public CategoryController(CategoryView view, CategoryModel model) {
         this.view = view;

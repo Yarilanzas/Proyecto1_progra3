@@ -106,6 +106,14 @@ public class ControllerLogin {
         StatisticsController statController = new StatisticsController(statView, statModel);
         tabbedPane.addTab("Estadísticas", statView.getPanel());
 
+        tabbedPane.addChangeListener(e -> {
+            int selectedIndex = tabbedPane.getSelectedIndex();
+            if (selectedIndex != -1 && tabbedPane.getTitleAt(selectedIndex).equals("Recursos")) {
+                // Usas la misma instancia resController declarada arriba
+                resController.cargarCategorias();
+            }
+        });
+
         // vista
         adminFrame.add(tabbedPane);
         adminFrame.setSize(900, 700);

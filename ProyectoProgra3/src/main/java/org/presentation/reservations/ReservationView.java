@@ -290,16 +290,15 @@ public class ReservationView {
         if (categoriasSeleccionadas.isEmpty()) {
             throw new Exception("Debe seleccionar al menos una categoría de la tabla.");
         }
-        if (org.domain.UserSession.getInstance().isLoggedIn()) {
-            User usuarioActual = org.domain.UserSession.getInstance().getCurrentUser();
-
-            if (usuarioActual instanceof Employee) {
-                r.setEmployee((Employee) usuarioActual);
+        if (UserSession.getInstance().isLoggedIn()) {
+            User usuario = UserSession.getInstance().getCurrentUser();
+            if (usuario instanceof Employee) {
+                r.setEmployee((Employee) usuario);
             } else {
-                throw new Exception("El usuario en sesión no es un funcionario");
+                throw new Exception("El usuario en sesión no es un funcionario/empleado válido para realizar reservas.");
             }
         } else {
-            throw new Exception("No hay ningún funcionario en sesión activa.");
+            throw new Exception("No hay ninguna sesión de usuario activa. Debe iniciar sesión.");
         }
 
         return r;
