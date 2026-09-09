@@ -42,7 +42,6 @@ public class ReservationTableModel extends AbstractTableModel<Reservation> {
                 return inicio + " - " + fin;
             case RECURSO:
                 if (re.getResources() != null && !re.getResources().isEmpty()) {
-                    // Une los IDs de los recursos separados por coma
                     return re.getResources().stream()
                             .map(Resource::getId)
                             .collect(Collectors.joining(", "));
