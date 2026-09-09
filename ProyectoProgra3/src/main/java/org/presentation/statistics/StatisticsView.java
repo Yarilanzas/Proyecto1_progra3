@@ -13,6 +13,7 @@ import org.presentation.activities.ActivityTableModel;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
@@ -38,6 +39,13 @@ public class StatisticsView implements PropertyChangeListener{
     private StatisticsController controller;
 
     public StatisticsView() {
+
+        tableActividades.setRowHeight(35);
+        tableActividades.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+
+        tableCategorias.setRowHeight(35);
+        tableCategorias.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+
         cargarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -74,7 +82,7 @@ public class StatisticsView implements PropertyChangeListener{
                 break;
             case StatisticsModel.ACTIVITIES:
                 int [] colsAct = {ActivitiesTableModel.SEMANA,ActivitiesTableModel.CANTIDAD};
-                tableCategorias.setModel(new ActivitiesTableModel(colsAct,model.getActivityStats()));
+                tableActividades.setModel(new ActivitiesTableModel(colsAct,model.getActivityStats()));
                 mostrargraficoActividades();
                 break;
         }
@@ -86,15 +94,15 @@ public class StatisticsView implements PropertyChangeListener{
             dataset.addValue(ce.getCantidad(),"Recurso",ce.getCategory().getDescription());
         }
 
-        JFreeChart chart = ChartFactory.createLineChart
-                ("Recursos usados", "Recurso", "Cantidad",
-                        dataset,PlotOrientation.VERTICAL,true,true,false);
-        CategoryPlot plot = (CategoryPlot) chart.getPlot();
-        LineAndShapeRenderer renderer = (LineAndShapeRenderer) plot.getRenderer();
-        renderer.setDefaultLinesVisible(true);
+        JFreeChart chart = ChartFactory.createBarChart(
+                "Recursos usados","Categoria", "Cantidad",
+                dataset,PlotOrientation.VERTICAL,true,true,false);
         ChartPanel chartPanel = new ChartPanel(chart);
         graficoRecursos.removeAll();
-        graficoRecursos.add(chartPanel);
+        graficoRecursos.setLayout(new BorderLayout());
+        graficoRecursos.add(chartPanel, BorderLayout.CENTER);
+        graficoRecursos.revalidate();
+        graficoRecursos.repaint();
     }
 
     public void mostrargraficoActividades(){
@@ -103,15 +111,15 @@ public class StatisticsView implements PropertyChangeListener{
             dataset.addValue(ae.getCantidad(),"Semana", ae.getSemana());
         }
 
-        JFreeChart chart = ChartFactory.createLineChart
-                ("Actividades realizadas", "Semana", "Cantidad",
-                        dataset,PlotOrientation.VERTICAL,true,true,false);
-        CategoryPlot plot = (CategoryPlot) chart.getPlot();
-        LineAndShapeRenderer renderer = (LineAndShapeRenderer) plot.getRenderer();
-        renderer.setDefaultLinesVisible(true);
+        JFreeChart chart = ChartFactory.createBarChart(
+                "Actividades realizadas","Semana", "Cantidad",
+                dataset,PlotOrientation.VERTICAL,true,true,false);
         ChartPanel chartPanel = new ChartPanel(chart);
         graficoActividades.removeAll();
-        graficoActividades.add(chartPanel);
+        graficoActividades.setLayout(new BorderLayout());
+        graficoActividades.add(chartPanel, BorderLayout.CENTER);
+        graficoActividades.revalidate();
+        graficoActividades.repaint();
     }
 
     public JPanel getPanel() {
@@ -136,5 +144,8 @@ public class StatisticsView implements PropertyChangeListener{
 
     public void setModel(StatisticsModel model) {
         this.model = model;
+        if (this.model != null){
+            this.model.addPropertyChangeListener(this);
+        }
     }
 }

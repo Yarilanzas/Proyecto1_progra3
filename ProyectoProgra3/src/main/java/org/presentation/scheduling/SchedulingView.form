@@ -57,20 +57,20 @@
                   <text value="Cargar"/>
                 </properties>
               </component>
-              <component id="64f55" class="javax.swing.JButton" default-binding="true">
-                <constraints>
-                  <grid row="0" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <icon value="print_26dp_A81F61_FILL0_wght400_GRAD0_opsz24.png"/>
-                  <text value="Imprimir"/>
-                </properties>
-              </component>
               <component id="425a6" class="com.github.lgooddatepicker.components.DatePicker" binding="fechaPicker">
                 <constraints>
                   <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties/>
+              </component>
+              <component id="25c1c" class="javax.swing.JButton" binding="imprimirButton">
+                <constraints>
+                  <grid row="0" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <icon value="print.png"/>
+                  <text value="Imprimir"/>
+                </properties>
               </component>
             </children>
           </grid>

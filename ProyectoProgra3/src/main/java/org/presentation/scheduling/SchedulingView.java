@@ -17,12 +17,35 @@ public class SchedulingView implements PropertyChangeListener{
     private JButton cargarButton;
     private JTable Calendarizaciontable;
     private JPanel principalPanel;
+    private JButton imprimirButton;
 
     private SchedulingModel model;
     private SchedulingController controller;
 
 
     public SchedulingView() {
+
+        Calendarizaciontable.setRowHeight(32);
+        Calendarizaciontable.setDefaultRenderer(Object.class,new javax.swing.table.DefaultTableCellRenderer(){
+            @Override
+            public java.awt.Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column){
+                java.awt.Component c = super.getTableCellRendererComponent(table,value,isSelected,hasFocus,row,column);
+
+                if (column > 0 && value != null && !value.toString().trim().isEmpty()){
+                    c.setBackground(new java.awt.Color(223, 149, 194));
+                    c.setForeground(java.awt.Color.BLACK);
+                }else {
+                    c.setBackground(java.awt.Color.WHITE);
+                    c.setForeground(java.awt.Color.BLACK);
+                }
+
+                if (isSelected){
+                    c.setBackground(table.getSelectionBackground());
+                }
+                return c;
+            }
+        });
+
         cargarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -37,6 +60,18 @@ public class SchedulingView implements PropertyChangeListener{
                     controller.cargarCalendar(fecha,categoria);
                 } catch (Exception ex){
                     JOptionPane.showMessageDialog(CalendarizacionPanel,ex.getMessage(),"Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+
+        imprimirButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try{
+                    controller.print();
+                }catch (Exception ex) {
+                    JOptionPane.showMessageDialog(CalendarizacionPanel, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -59,6 +94,7 @@ public class SchedulingView implements PropertyChangeListener{
                 break;
         }
     }
+
 
     public JPanel getPanel() {
         return principalPanel;

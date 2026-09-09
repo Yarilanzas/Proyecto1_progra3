@@ -33,6 +33,9 @@ public class  EmployeeView implements  PropertyChangeListener{
         // Inicialización básica y carga de íconos para las pestañas
         cargarIconosPestanias();
 
+        table1.setRowHeight(35);
+        table1.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+
         table1.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -99,10 +102,22 @@ public class  EmployeeView implements  PropertyChangeListener{
                 }
             }
         });
+
         limpiarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 controller.clear();
+            }
+        });
+
+        ImprimirButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try{
+                    controller.print();
+                }catch (Exception ex) {
+                    JOptionPane.showMessageDialog(Panel, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
     }

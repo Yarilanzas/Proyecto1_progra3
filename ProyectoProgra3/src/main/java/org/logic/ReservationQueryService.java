@@ -23,7 +23,6 @@ import java.util.*;
 import java.time.DayOfWeek;
 
 
-
 public class ReservationQueryService {
     private static final String[] HORAS = {"06:00","07:00","08:00","09:00","10:00",
             "11:00","12:00","13:00","14:00", "15:00","16:00","17:00","18:00", "19:00",
@@ -43,18 +42,23 @@ public class ReservationQueryService {
         Map<String,Map<String,String>> celdas = new HashMap<>();
 
         for(Reservation res : data.getReservations()){
-            if (!"ACTIVA".equals(res.getStatus())) continue;
+            if (!"ACTIVA".equalsIgnoreCase(res.getStatus())) continue;
             if (!fecha.equals(res.getDate())) continue;
 
-            for (DetailReservation detalle : res.getDetails()){
-                Resource asignado = detalle.getAssignedResource();
+            String nomEmp = (res.getEmployee() != null) ? res.getEmployee().getName() : "No asignado";
+            String texto = res.getActivity() + " - " + nomEmp;
+
+            List<Resource> asignados = (res.getResources() != null) ? res.getResources() : new ArrayList<>();
+
+            for (Resource asignado : asignados) {
+
                 boolean categoriaseleccionada = recursos.stream().anyMatch(r -> r.getId().equals(asignado.getId()));
                 if (!categoriaseleccionada) continue;
 
                 for (String hora : horas){
                     if (horaEnRango(hora,res.getStartTime(), res.getEndTime())){
                         celdas.computeIfAbsent(hora, h -> new HashMap<>())
-                                .put(asignado.getId(), res.getActivity() + " - " +  res.getEmployee().getName());
+                                .put(asignado.getId(),texto);
                     }
                 }
             }
@@ -88,6 +92,7 @@ public class ReservationQueryService {
 
             for (String hora : horas){
                 if (horaEnRango(hora, reserva.getStartTime(), reserva.getEndTime())){
+                    String nomEmp = (reserva.getEmployee() != null) ? reserva.getEmployee().getName() : "No asignado";
                     celdas.computeIfAbsent(hora, h -> new HashMap<>()).put(reserva.getDate(), reserva.getActivity() + " (" + reserva.getEmployee().getName() + ") ");
                 }
             }
@@ -108,8 +113,10 @@ public class ReservationQueryService {
             if (!"ACTIVA".equals(reserva.getStatus())) continue;
             if (reserva.getDate().isBefore(desde) || reserva.getDate().isAfter(hasta)) continue;
 
-            for (DetailReservation detalle : reserva.getDetails()){
-                String categoriaId = detalle.getAssignedResource().getCategory().getId();
+            List<Resource> asignados = (reserva.getResources() != null) ? reserva.getResources() : new ArrayList<>();
+
+            for (Resource recurso : asignados){
+                String categoriaId = recurso.getCategory().getId();
 
                 for (CategoryStatistics ce: estadisticas){
                     if (ce.getCategory().getId().equals(categoriaId)){
@@ -130,6 +137,7 @@ public class ReservationQueryService {
         LocalDate lunes = desde.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
         for (LocalDate date = lunes; !date.isAfter(hasta); date = date.plusDays(7)){
             estadisticas.add(new ActivityStatistics(date.toString(),0));
+            fechas.add(date);
         }
 
         data.getReservations().stream()
