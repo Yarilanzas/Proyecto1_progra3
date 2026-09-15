@@ -85,6 +85,7 @@ public class CategoryView implements PropertyChangeListener {
 
                     if (descripcion.isEmpty()){
                         JOptionPane.showMessageDialog(principalPanel,"Debe ingresar una descripcion");
+                        controller.list();
                         return;
                     }else {
                         controller.searchDesc(descripcion);

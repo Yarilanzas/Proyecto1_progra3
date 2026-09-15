@@ -33,6 +33,8 @@ public class  EmployeeView implements  PropertyChangeListener{
         // Inicialización básica y carga de íconos para las pestañas
         cargarIconosPestanias();
 
+        idfuncionarios.setEditable(false);
+
         table1.setRowHeight(35);
         table1.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
@@ -53,14 +55,12 @@ public class  EmployeeView implements  PropertyChangeListener{
                 String id = idFld.getText().trim();
                 String nombre = nombreFld.getText().trim();
 
-                if (id.isEmpty() && nombre.isEmpty()){
-                    JOptionPane.showMessageDialog(Panel,"Debe ingresar nombre o ID");
-                    return;
-                }
-
                 if (!id.isEmpty()){
                     controller.search(id,true);
                 }else{
+                    if (nombre.isEmpty()){
+                        JOptionPane.showMessageDialog(Panel,"Debe ingresar nombre o ID");
+                    }
                     controller.search(nombre,false);
                 }
 
@@ -125,7 +125,6 @@ public class  EmployeeView implements  PropertyChangeListener{
     private Employee take(){
         Employee emp = new Employee();
         emp.setId(idfuncionarios.getText().trim());
-        emp.setPassword(idfuncionarios.getText().trim());
         emp.setName(nombreFuncionarios.getText().trim());
         emp.setPhone(telefono.getText().trim());
         return emp;
@@ -133,15 +132,6 @@ public class  EmployeeView implements  PropertyChangeListener{
 
     private boolean validate(){
         boolean valid = true;
-
-        if (idfuncionarios.getText().trim().isEmpty()){
-            valid = false;
-            idfuncionarios.setBackground(Main.BACKGROUND_ERROR);
-            idfuncionarios.setToolTipText("Se requiere el campo de ID");
-        }else {
-            idfuncionarios.setBackground(null);
-            idfuncionarios.setToolTipText(null);
-        }
 
         if (nombreFuncionarios.getText().trim().isEmpty()){
             valid = false;

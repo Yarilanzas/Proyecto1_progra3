@@ -34,6 +34,8 @@ public class EmployeeService {
         if (exist != null){
             data.getEmployees().remove(exist);
         } else {
+            String nuevo = generateId(data.getEmployees());
+            employee.setId(nuevo);
             employee.setPassword(employee.getId());
         }
         data.getEmployees().add(employee);
@@ -56,5 +58,24 @@ public class EmployeeService {
             }
         }
         return null;
+    }
+
+    private String generateId(List<Employee> emp){
+        int max = 0;
+        for (Employee e : emp){
+            String num = e.getId().replace("FUN-","");
+            try{
+                int valor = Integer.parseInt(num);
+                if (valor > max){
+                    max = valor;
+                }
+            } catch (NumberFormatException ignored) {}
+        }
+        int numNuevo = max +1;
+        String numeroText = String.valueOf(numNuevo);
+        while (numeroText.length() <3){
+            numeroText = "0" + numeroText;
+        }
+        return "FUN-" + numeroText;
     }
 }
