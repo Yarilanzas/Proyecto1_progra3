@@ -46,6 +46,7 @@ public class ReservationView {
             @Override
             public void actionPerformed(ActionEvent e) {
                 categoriasSeleccionadas.clear();
+                frasetextField.setText("");
                 categoriastable2.clearSelection();
                 if (controller != null) {
                     controller.clear();

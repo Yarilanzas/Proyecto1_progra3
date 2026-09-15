@@ -39,7 +39,11 @@ public class ResourceController {
         view.setController(this);
         view.setModel(model);
         cargarCategorias();
-        list();
+        try {
+            list();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al inicializar la vista de recursos: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
 
     }
 
@@ -81,7 +85,12 @@ public class ResourceController {
     }
 
     public void clear(){
-        model.setCurrent(new Resource());
+        try {
+            model.setCurrent(new Resource());
+            list();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al refrescar la lista: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public void delete(String id){
@@ -94,11 +103,13 @@ public class ResourceController {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    public void list() {
+    public void list() throws Exception {
+       // throw new Exception("Debe ingresar d¿los datos:");
+
         try {
             model.setResources(resourceService.findAllResources());
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new Exception("Error al obtener la lista de recursos: " + e.getMessage());
         }
     }
     public void edit(int row) {

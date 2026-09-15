@@ -19,6 +19,7 @@ import com.itextpdf.layout.properties.TextAlignment;
 import org.bouncycastle.jcajce.provider.symmetric.DES;
 import org.domain.Category;
 import org.domain.Employee;
+import org.domain.Resource;
 import org.logic.CategoryService;
 import org.logic.ResourceService;
 import org.presentation.resource.ResourceController;
@@ -82,7 +83,13 @@ public class CategoryController {
     }
 
     public void clear() {
-        model.setCurrent(new Category());
+
+        try {
+            model.setCurrent(new Category());
+            list();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al refrescar la lista: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
     public void searchDesc(String desc) {
         try{

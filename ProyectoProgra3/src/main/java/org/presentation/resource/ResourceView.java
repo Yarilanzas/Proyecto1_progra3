@@ -39,38 +39,40 @@ public class ResourceView implements PropertyChangeListener {
         buscarButton2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String descripcion = textField4.getText().trim().toUpperCase();
-                Category categoriaSeleccionada = (Category) comboBoxCategorias.getSelectedItem();
+                try {
+                    String descripcion = textField4.getText().trim().toUpperCase();
+                    Category categoriaSeleccionada = (Category) comboBoxCategorias.getSelectedItem();
 
-                if (descripcion.isEmpty() && categoriaSeleccionada == null) {
-                    controller.list();
-                    return;
-                }
+                    if (descripcion.isEmpty() && categoriaSeleccionada == null) {
+                        JOptionPane.showMessageDialog(principalPanel, "Debe ingresar los datos requeridos.", "Sin Datos", JOptionPane.INFORMATION_MESSAGE);
 
-                if (!descripcion.isEmpty()) {
-                    controller.searchbyDes(descripcion);
-                }
-                else if (categoriaSeleccionada != null) {
-                    controller.searchbyCategory(categoriaSeleccionada.getDescription());
-                }
-                if (model.getResources().isEmpty()) {
-                    JOptionPane.showMessageDialog(principalPanel, "No se encontraron recursos con los criterios especificados.");
+                        controller.list();
+                        return;
+                    }
+
+                    if (!descripcion.isEmpty()) {
+                        controller.searchbyDes(descripcion);
+                    } else if (categoriaSeleccionada != null) {
+                        controller.searchbyCategory(categoriaSeleccionada.getDescription());
+                    }
+
+                    if (model.getResources() == null || model.getResources().isEmpty()) {
+                        JOptionPane.showMessageDialog(principalPanel, "No se encontraron recursos con los criterios especificados.", "Sin Resultados", JOptionPane.INFORMATION_MESSAGE);
+                    }
+
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(principalPanel, "Error al buscar recursos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
-
-
         });
         guardarButton2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try{
-                    if(validateJTextField(IDRecursofld) && validateJTextField(DescripcionRecursofld)){
-
-                        controller.saveResource(takeResoruce());
-                    }
-                }catch(Exception ex){
-                    JOptionPane.showMessageDialog(principalPanel, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-
+                try {
+                    controller.saveResource(takeResoruce());
+                    JOptionPane.showMessageDialog(principalPanel, "Recurso guardado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(principalPanel, ex.getMessage(), "Error de Validación", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -119,8 +121,22 @@ public class ResourceView implements PropertyChangeListener {
             }
         });
     }
-    public Resource takeResoruce(){
+    public Resource takeResoruce()throws Exception {
         Resource r= new Resource();
+        if (!validateJTextField(IDRecursofld)) {
+            IDRecursofld.requestFocus();
+            throw new Exception("Debe ingresar un ID para el recurso.");
+        }
+
+        if (!validateJTextField(DescripcionRecursofld)) {
+            DescripcionRecursofld.requestFocus();
+            throw new Exception("Debe ingresar una descripción para el recurso.");
+        }
+
+        if (RecursoCategoriafld.getSelectedItem() == null) {
+            RecursoCategoriafld.requestFocus();
+            throw new Exception("Debe seleccionar una categoría para el recurso.");
+        }
         r.setId(IDRecursofld.getText().trim());
         r.setCategory((Category) RecursoCategoriafld.getSelectedItem());
         r.setDescription(DescripcionRecursofld.getText().trim());
@@ -166,6 +182,7 @@ public class ResourceView implements PropertyChangeListener {
                 comboBoxCategorias.setModel(modelo);
                 RecursoCategoriafld.setModel(modelo2);
                 comboBoxCategorias.setSelectedIndex(-1);
+                RecursoCategoriafld.setSelectedIndex(-1);
 
                 break;
 
@@ -199,7 +216,7 @@ public class ResourceView implements PropertyChangeListener {
         this.principalPanel.revalidate();
     }
 
-    private boolean validateJTextField(JTextField field){
+    private boolean validateJTextField(JTextField field) {
         return field != null && !field.getText().trim().isEmpty();
     }
 }
