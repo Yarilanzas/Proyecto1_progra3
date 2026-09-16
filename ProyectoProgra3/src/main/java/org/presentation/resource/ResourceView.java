@@ -168,7 +168,7 @@ public class ResourceView implements PropertyChangeListener {
         this.model.addPropertyChangeListener(this);
     }
 
-
+@Override
     public void propertyChange(PropertyChangeEvent evt) {
         switch (evt.getPropertyName()) {
             case ResourceModel.CATEGORIES:

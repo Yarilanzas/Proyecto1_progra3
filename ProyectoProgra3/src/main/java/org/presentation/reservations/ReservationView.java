@@ -11,12 +11,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.net.URL;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReservationView {
+public class ReservationView implements PropertyChangeListener {
     private JPanel Panel;
     private JTextField frasetextField;
     private JTextField ActividadtextField1;
@@ -230,6 +231,7 @@ public class ReservationView {
         return (url != null) ? new ImageIcon(url) : null;
     }
 
+    @Override
     public void propertyChange(PropertyChangeEvent evt) {
         switch (evt.getPropertyName()) {
             case ReservationModel.CURRENT:
