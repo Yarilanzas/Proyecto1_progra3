@@ -5,11 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * PRUEBA UNITARIA (la corre Surefire con "mvn test").
- * No toca archivos, base de datos ni nada externo: solo prueba la clase
- * Category aislada. Por eso es "unitaria".
- */
 class CategoryTest {
 
     private Category category;
