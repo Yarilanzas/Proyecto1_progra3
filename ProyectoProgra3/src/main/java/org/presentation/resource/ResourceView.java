@@ -37,6 +37,16 @@ public class ResourceView implements PropertyChangeListener {
         ResourceTable.setRowHeight(35);
         ResourceTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
+
+        textField4.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            private void evaluar() {
+                boolean tieneTexto = !textField4.getText().trim().isEmpty();
+                comboBoxCategorias.setEnabled(!tieneTexto);
+            }
+            public void insertUpdate(javax.swing.event.DocumentEvent e) { evaluar(); }
+            public void removeUpdate(javax.swing.event.DocumentEvent e) { evaluar(); }
+            public void changedUpdate(javax.swing.event.DocumentEvent e) { evaluar(); }
+        });
         buscarButton2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -45,8 +55,7 @@ public class ResourceView implements PropertyChangeListener {
                     Category categoriaSeleccionada = (Category) comboBoxCategorias.getSelectedItem();
 
                     if (descripcion.isEmpty() && categoriaSeleccionada == null) {
-                        JOptionPane.showMessageDialog(principalPanel, "Debe ingresar los datos requeridos.", "Sin Datos", JOptionPane.INFORMATION_MESSAGE);
-
+                        JOptionPane.showMessageDialog(principalPanel, "Debe ingresar una descripción o seleccionar una categoría.", "Atención", JOptionPane.WARNING_MESSAGE);
                         controller.list();
                         return;
                     }
@@ -80,7 +89,15 @@ public class ResourceView implements PropertyChangeListener {
         limpiarButton2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.clear();
+                textField4.setText("");
+                comboBoxCategorias.setSelectedIndex(-1);
+
+                textField4.setEnabled(true);
+                comboBoxCategorias.setEnabled(true);
+
+                if (controller != null) {
+                    controller.clear();
+                }
             }
         });
         borrarButton2.addActionListener(new ActionListener() {
@@ -119,6 +136,13 @@ public class ResourceView implements PropertyChangeListener {
                 }catch (Exception ex) {
                     JOptionPane.showMessageDialog(principalPanel, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
+            }
+        });
+        comboBoxCategorias.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                boolean tieneSeleccion = comboBoxCategorias.getSelectedItem() != null && comboBoxCategorias.getSelectedIndex() != -1;
+                textField4.setEnabled(!tieneSeleccion);
             }
         });
     }
