@@ -31,10 +31,11 @@ public class ResourceView implements PropertyChangeListener {
 
     private ResourceModel model;
     private ResourceController controller;
-    private JTable tableCategories;
-
 
     public ResourceView() {
+
+        ResourceTable.setRowHeight(35);
+        ResourceTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
         buscarButton2.addActionListener(new ActionListener() {
             @Override

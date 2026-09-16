@@ -40,6 +40,13 @@ public class ReservationView {
     private ReservationController controller;
 
     public ReservationView() {
+
+        categoriastable2.setRowHeight(35);
+        categoriastable2.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+
+        reservastable1.setRowHeight(35);
+        reservastable1.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+
         categoriastable2.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
         limpiarButton.addActionListener(new ActionListener() {

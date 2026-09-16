@@ -27,6 +27,10 @@ public class CategoryView implements PropertyChangeListener {
     private CategoryController controller;
 
     public CategoryView() {
+
+        tableCategories.setRowHeight(35);
+        tableCategories.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+
         guardarButton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
