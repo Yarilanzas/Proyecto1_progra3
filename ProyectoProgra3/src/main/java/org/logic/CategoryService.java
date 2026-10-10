@@ -1,72 +1,60 @@
 package org.logic;
 
-import org.data.Data;
-import org.data.XMLRepository;
 import org.domain.Category;
-import org.domain.Employee;
-
+import org.data.CategoryDAO;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CategoryService {
+
+    private CategoryDAO categoryDAO;
+
+    public CategoryService() {
+        this.categoryDAO =  new CategoryDAO();
+    }
+
     public List<Category> findAll() throws Exception{
-        Data data = XMLRepository.instance().load();
-        return data.getCategories();
+        return categoryDAO.findAll();
     }
 
     public Category findById(String id) throws Exception{
-        Data data = XMLRepository.instance().load();
-       return data.getCategories().stream().filter
-               (c -> c.getId().equals(id))
-               .findFirst().orElse(null);
+        try {
+            return categoryDAO.read(id);
+        } catch (Exception ex){
+            return null;
+        }
     }
     public Category findByDesc(String des)throws Exception{
-        Data data = XMLRepository.instance().load();
-        for (Category e : data.getCategories()){
-            if (e.getDescription().equals(des)){
-                return e;
+        List<Category> categories = categoryDAO.findbyDescription(des);
+        for (Category c :categories){
+            if (c.getDescription().equalsIgnoreCase(des)){
+                return c;
             }
         }
         return null;
     }
 
     public List<Category> findByDescription(String descripcion) throws Exception{
-        Data data = XMLRepository.instance().load();
-        return data.getCategories().stream().filter
-                (c -> c.getDescription().toLowerCase()
-                        .contains(descripcion.toLowerCase()))
-                        .collect(Collectors.toList());
+        return categoryDAO.findbyDescription(descripcion);
     }
 
     public void save(Category categoria) throws Exception {
-        Data data = XMLRepository.instance().load();
+       Category existe = null;
+       if (categoria.getId() != null && !categoria.getId().trim().isEmpty()){
+           existe = findById(categoria.getId());
+       }
 
-        Category existe = (categoria.getId() != null && !categoria.getId().isEmpty())
-                ? data.getCategories().stream()
-                .filter(c -> c.getId().equals(categoria.getId()))
-                .findFirst().orElse(null)
-                : null;
-
-        if (existe != null) {
-            existe.setDescription(categoria.getDescription());
-        } else {
-            categoria.setId(generarId(data.getCategories()));
-            data.getCategories().add(categoria);
-        }
-
-        XMLRepository.instance().store(data);
+       if (existe != null){
+           categoryDAO.update(categoria);
+       } else{
+           if (categoria.getId() == null || categoria.getId().trim().isEmpty()){
+               categoria.setId(generarId(categoryDAO.findAll()));
+           }
+           categoryDAO.create(categoria);
+       }
     }
 
     public void delete(String id) throws Exception {
-        Data data = XMLRepository.instance().load();
-        Category existe = data.getCategories().stream().filter
-                        (c -> c.getId().equals(id))
-                .findFirst().orElse(null);
-
-        if (existe != null) {
-            data.getCategories().remove(existe);
-            XMLRepository.instance().store(data);
-        }
+       categoryDAO.delete(id);
     }
 
     private String generarId(List<Category> categorias){

@@ -1,8 +1,5 @@
 package org.logic;
 
-import org.data.Data;
-import org.data.XMLRepository;
-import org.domain.Category;
 import org.domain.Resource;
 
 import java.util.List;

@@ -1,7 +1,5 @@
 package org.logic.loginLogic;
 
-import org.data.Data;
-import org.data.XMLRepository;
 import org.domain.User;
 
 public class ChangePasswordService {

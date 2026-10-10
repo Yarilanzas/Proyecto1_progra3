@@ -1,12 +1,8 @@
 package org.logic.loginLogic;
 
-import org.data.Data;
-
-import org.data.XMLRepository;
 import org.domain.User;
 
 import java.io.File;
-import java.util.Objects;
 
 public class LoginService {
 

@@ -1,13 +1,7 @@
 package org.domain;
 import java.util.*;
-import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import org.data.LocalDateAdapter;
 import java.time.LocalDate;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlRootElement;
 
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Reservation {
     private String id;
     private String activity;
@@ -15,13 +9,11 @@ public class Reservation {
     private List<Resource> resources = new ArrayList<>();
 
     private Category category;
-    @XmlJavaTypeAdapter(LocalDateAdapter.class)
     private LocalDate date;
 
     public List<Resource> getResources() {
         return resources;
     }
-
     public void setResources(List<Resource> resources) {
         this.resources = resources;
     }

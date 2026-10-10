@@ -1,7 +1,5 @@
 package org.logic;
 
-import org.data.Data;
-import org.data.XMLRepository;
 import org.domain.Employee;
 import java.util.List;
 import java.util.stream.Collectors;

@@ -1,10 +1,5 @@
 package org.domain;
 
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlRootElement;
-
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Resource {
     private Category category;
     private String id;

@@ -12,6 +12,7 @@ package org.logic;
 
 import org.data.*;
 import org.domain.*;
+
 import org.presentation.statistics.CategoryStatistics;
 import org.presentation.statistics.ActivityStatistics;
 
@@ -28,20 +29,24 @@ public class ReservationQueryService {
             "11:00","12:00","13:00","14:00", "15:00","16:00","17:00","18:00", "19:00",
             "20:00","21:00","22:00","23:00"};
 
-    public CalendarData getCalendar(LocalDate fecha,Category categoria) throws Exception{
-        Data data = XMLRepository.instance().load();
+    private final ReservationDAO reservationDAO;
+    private final ResourceDAO resourceDAO;
+    private final CategoryDAO categoryDAO;
 
-        List<Resource> recursos = new ArrayList<>();
-        for (Resource r : data.getResources()){
-            if (r.getCategory().getId().equals(categoria.getId())){
-                recursos.add(r);
-            }
-        }
+    public ReservationQueryService(){
+        this.reservationDAO = new ReservationDAO();
+        this.resourceDAO = new ResourceDAO();
+        this.categoryDAO = new CategoryDAO();
+    }
+
+    public CalendarData getCalendar(LocalDate fecha,Category categoria) throws Exception{
+       List<Resource> recursos = resourceDAO.findbyCategory(categoria.getId());
+       List<Reservation> reservas = reservationDAO.findAll();
 
         List<String> horas = Arrays.asList(HORAS);
         Map<String,Map<String,String>> celdas = new HashMap<>();
 
-        for(Reservation res : data.getReservations()){
+        for (Reservation res : reservas){
             if (!"ACTIVA".equalsIgnoreCase(res.getStatus())) continue;
             if (!fecha.equals(res.getDate())) continue;
 
@@ -51,8 +56,8 @@ public class ReservationQueryService {
             List<Resource> asignados = (res.getResources() != null) ? res.getResources() : new ArrayList<>();
 
             for (Resource asignado : asignados) {
-
                 boolean categoriaseleccionada = recursos.stream().anyMatch(r -> r.getId().equals(asignado.getId()));
+
                 if (!categoriaseleccionada) continue;
 
                 for (String hora : horas){
@@ -75,25 +80,26 @@ public class ReservationQueryService {
     }
 
     public ActivityData getHorarioSemanal(LocalDate fecharef) throws Exception{
-        Data data = XMLRepository.instance().load();
-
         LocalDate lunes = fecharef.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)); //agarra el dia lunes
         List<LocalDate> dias = new ArrayList<>();
         for(int i = 0; i<7;i++){
             dias.add(lunes.plusDays(i)); //va agregando los demas dias y crea una ;ista de
         }
 
+        List<Reservation> reservas = reservationDAO.findAll();
         List<String> horas = Arrays.asList(HORAS);
         Map<String, Map<LocalDate,String>> celdas = new HashMap<>();
 
-        for (Reservation reserva : data.getReservations()){
+        for (Reservation reserva : reservas){
             if (!"ACTIVA".equals(reserva.getStatus())) continue;
             if (!dias.contains(reserva.getDate())) continue;
 
+            String nomEmp = (reserva.getEmployee()!=null) ? reserva.getEmployee().getName() : "No asignado";
+
             for (String hora : horas){
                 if (horaEnRango(hora, reserva.getStartTime(), reserva.getEndTime())){
-                    String nomEmp = (reserva.getEmployee() != null) ? reserva.getEmployee().getName() : "No asignado";
-                    celdas.computeIfAbsent(hora, h -> new HashMap<>()).put(reserva.getDate(), reserva.getActivity() + " (" + reserva.getEmployee().getName() + ") ");
+                    celdas.computeIfAbsent(hora, h -> new HashMap<>())
+                            .put(reserva.getDate(), reserva.getActivity() + " (" + nomEmp + ")");
                 }
             }
         }
@@ -102,20 +108,23 @@ public class ReservationQueryService {
 
 
     public List <CategoryStatistics> getResourceStatistics(LocalDate desde, LocalDate hasta) throws Exception{
-        Data data = XMLRepository.instance().load();
+        List<Category> categories = categoryDAO.findAll();
+        List<Reservation> reservas = reservationDAO.findAll();
+
 
         List<CategoryStatistics> estadisticas = new ArrayList<>();
-        for (Category c : data.getCategories()){
+        for (Category c : categories){
             estadisticas.add(new CategoryStatistics(c,0));
         }
 
-        for (Reservation reserva : data.getReservations()){
-            if (!"ACTIVA".equals(reserva.getStatus())) continue;
+        for (Reservation reserva : reservas){
+            if (!"ACTIVA".equalsIgnoreCase(reserva.getStatus())) continue;
             if (reserva.getDate().isBefore(desde) || reserva.getDate().isAfter(hasta)) continue;
 
             List<Resource> asignados = (reserva.getResources() != null) ? reserva.getResources() : new ArrayList<>();
 
             for (Resource recurso : asignados){
+                if (recurso.getCategory() == null) continue;
                 String categoriaId = recurso.getCategory().getId();
 
                 for (CategoryStatistics ce: estadisticas){
@@ -129,7 +138,7 @@ public class ReservationQueryService {
     }
 
     public List<ActivityStatistics> getActivityStatistics(LocalDate desde, LocalDate hasta) throws Exception{
-        Data data = XMLRepository.instance().load();
+        List<Reservation> reservas = reservationDAO.findAll();
 
         List<ActivityStatistics> estadisticas = new ArrayList<>();
         List<LocalDate> fechas = new ArrayList<>();
@@ -140,8 +149,8 @@ public class ReservationQueryService {
             fechas.add(date);
         }
 
-        data.getReservations().stream()
-            .filter(r -> "ACTIVA".equals(r.getStatus()))
+        reservas.stream()
+            .filter(r -> "ACTIVA".equalsIgnoreCase(r.getStatus()))
             .filter(r -> !r.getDate().isBefore(desde) && !r.getDate().isAfter(hasta))
             .forEach(r -> {
                 for (int i = fechas.size() - 1; i>=0; i--){

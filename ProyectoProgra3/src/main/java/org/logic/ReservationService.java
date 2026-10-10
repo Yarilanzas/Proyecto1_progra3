@@ -2,8 +2,11 @@ package org.logic;
 
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.service.AiServices;
-import org.data.Data;
-import org.data.XMLRepository;
+
+import org.data.CategoryDAO;
+import org.data.ResourceDAO;
+import org.data.ReservationDAO;
+
 import org.domain.Category;
 import org.domain.ReservaExtraccion;
 import org.domain.Reservation;
@@ -16,21 +19,28 @@ import java.util.stream.Collectors;
 
 public class ReservationService {
 
-    public void save(Reservation newReservation, List<Category> categoriasSeleccionadas) throws Exception {
-        Data data = XMLRepository.instance().load();
+    private final ReservationDAO reservationDAO;
+    private final ResourceDAO resourceDAO;
+    private final CategoryDAO categoryDAO;
 
-        int nextNumber = data.getReservations().size() + 1;
-        newReservation.setId(String.format("RES-%03d", nextNumber));
+    public ReservationService(){
+        this.reservationDAO = new ReservationDAO();
+        this.resourceDAO = new ResourceDAO();
+        this.categoryDAO = new CategoryDAO();
+    }
+
+    public void save(Reservation newReservation, List<Category> categoriasSeleccionadas) throws Exception {
+        List<Reservation> todasReservas = reservationDAO.findAll();
+
+        newReservation.setId(generateNextId(todasReservas.size()));
         newReservation.setStatus("ACTIVA");
 
         List<Resource> recursosAsignados = new ArrayList<>();
 
         for (Category cat : categoriasSeleccionadas) {
-            List<Resource> recursosDeCat = data.getResources().stream()
-                    .filter(r -> r.getCategory() != null && r.getCategory().getId().equals(cat.getId()))
-                    .collect(Collectors.toList());
+            List<Resource> recursosDeCat = resourceDAO.findbyCategory(cat.getId());
 
-            Resource disponible = buscarRecursoDisponible(recursosDeCat, newReservation, data.getReservations());
+            Resource disponible = buscarRecursoDisponible(recursosDeCat, newReservation, todasReservas);
 
             if (disponible == null) {
                 throw new Exception("No hay recursos disponibles para la categoría '"
@@ -41,8 +51,7 @@ public class ReservationService {
         }
 
         newReservation.setResources(recursosAsignados);
-        data.getReservations().add(newReservation);
-        XMLRepository.instance().store(data);
+       reservationDAO.create(newReservation);
     }
 
     private Resource buscarRecursoDisponible(List<Resource> recursos, Reservation nuevaReserva, List<Reservation> reservasExistentes) {
@@ -84,13 +93,12 @@ public class ReservationService {
     }
 
     public List<Reservation> findAllResources() throws Exception{
-        Data data = XMLRepository.instance().load();
-        return data.getReservations();
+        return reservationDAO.findAll();
     }
     public ReservaExtraccion extraerReserva(String frase) throws Exception {
-        Data data = XMLRepository.instance().load();
+        List<Category> categories = categoryDAO.findAll();
 
-        String listaCategorias = data.getCategories().stream()
+        String listaCategorias = categories.stream()
                 .map(Category::getDescription)
                 .collect(Collectors.joining(", "));
 
@@ -105,35 +113,22 @@ public class ReservationService {
         return aiService.extraer(frase, listaCategorias, LocalTime.now().toString());
     }
     public void delete(String id) throws Exception {
-        Data data = XMLRepository.instance().load();
-        Reservation existe = data.getReservations().stream().filter
-                        (c -> c.getId().equals(id))
-                .findFirst().orElse(null);
-
-        if (existe != null) {
-            data.getReservations().remove(existe);
-            XMLRepository.instance().store(data);
-        }
+        reservationDAO.delete(id);
     }
 
     public void cancel(String id) throws Exception {
-        Data data = XMLRepository.instance().load();
-
-        Reservation existe = data.getReservations().stream()
-                .filter(r -> r.getId().equals(id))
-                .findFirst()
-                .orElse(null);
-
-        if (existe == null) {
-            throw new Exception("No se encontró la reservación solicitada.");
-        }
+       Reservation existe;
+       try{
+           existe = reservationDAO.read(id);
+       }catch (Exception ex){
+           throw new Exception("No se encontro la reservacion solicitada.");
+       }
 
         if ("CANCELADA".equalsIgnoreCase(existe.getStatus())) {
             throw new Exception("La reservación ya se encuentra cancelada.");
         }
 
         existe.setStatus("CANCELADA");
-
-        XMLRepository.instance().store(data);
+        reservationDAO.update(existe);
     }
 }
