@@ -74,42 +74,54 @@ public class ControllerLogin {
         EmployeeModel empModel = new EmployeeModel();
         EmployeeView empView = new EmployeeView();
         EmployeeController empController = new EmployeeController(empModel,empView);
-        tabbedPane.addTab("Funcionarios", empView.getPanel());
+        ImageIcon iconEmp = new ImageIcon(getClass().getResource("/employee.png"));
+        tabbedPane.addTab("Funcionarios", iconEmp, empView.getPanel());
+        //tabbedPane.addTab("Funcionarios", empView.getPanel());
+        //tabbedPane.setIconAt(1, new ImageIcon(getClass().getResource("/employee.png")));
+
+
 
         // Categorías
         CategoryModel catModel = new CategoryModel();
         CategoryView catView = new CategoryView();
         CategoryController catController = new CategoryController(catView, catModel);
-        tabbedPane.addTab("Categorías", catView.getPanel());
+        ImageIcon iconCat = new ImageIcon(getClass().getResource("/category1.png"));
+        tabbedPane.addTab("Categorías", iconCat, catView.getPanel());
 
         // Recursos
         ResourceModel resModel = new ResourceModel();
         ResourceView resView = new ResourceView();
         ResourceController resController = new ResourceController(resView, resModel);
-        tabbedPane.addTab("Recursos", resView.getPanel());
+        ImageIcon iconRe = new ImageIcon(getClass().getResource("/resources.png"));
+        tabbedPane.addTab("Recursos", iconRe, resView.getPanel());
 
         // Calendarización
         SchedulingModel schedModel = new SchedulingModel();
         SchedulingView schedView = new SchedulingView();
         SchedulingController schedController = new SchedulingController(schedView, schedModel);
-        tabbedPane.addTab("Calendarización", schedView.getPanel());
+        ImageIcon iconCal = new ImageIcon(getClass().getResource("/calendar.png"));
+        tabbedPane.addTab("Calendarización", iconCal, schedView.getPanel());
 
         // Actividades
         ActivityModel actModel = new ActivityModel();
         ActivityView actView = new ActivityView();
         ActivityController actController = new ActivityController(actView, actModel);
-        tabbedPane.addTab("Actividades", actView.getPanel());
+        ImageIcon iconView= new ImageIcon(getClass().getResource("/activities.png"));
+        tabbedPane.addTab("Actividades", iconView, actView.getPanel());
 
         // Estadísticas
         StatisticsModel statModel = new StatisticsModel();
         StatisticsView statView = new StatisticsView();
         StatisticsController statController = new StatisticsController(statView, statModel);
-        tabbedPane.addTab("Estadísticas", statView.getPanel());
+        ImageIcon iconStat = new ImageIcon(getClass().getResource("/statistic.png"));
+        tabbedPane.addTab("Estadísticas", iconStat, statView.getPanel());
+
+        //tabbedPane.addTab("Estadísticas", statView.getPanel());
+        //tabbedPane.setIconAt(5, new ImageIcon(getClass().getResource("/statistic.png")));
 
         tabbedPane.addChangeListener(e -> {
             int selectedIndex = tabbedPane.getSelectedIndex();
             if (selectedIndex != -1 && tabbedPane.getTitleAt(selectedIndex).equals("Recursos")) {
-                // Usas la misma instancia resController declarada arriba
                 resController.cargarCategorias();
             }
         });
@@ -131,25 +143,30 @@ public class ControllerLogin {
         ReservationModel resModel = new ReservationModel();
         ReservationView resView = new ReservationView();
         ReservationController resController = new ReservationController(resView, resModel);
-        tabbedPane.addTab("Reservas", resView.getPanel());
+        ImageIcon iconRe = new ImageIcon(getClass().getResource("/reservation1.png"));
+        tabbedPane.addTab("Reservas", iconRe, resView.getPanel());
 
         // Calendarización
         SchedulingModel schedModel = new SchedulingModel();
         SchedulingView schedView = new SchedulingView();
         SchedulingController schedController = new SchedulingController(schedView, schedModel);
-        tabbedPane.addTab("Calendarización", schedView.getPanel());
+        ImageIcon iconCal = new ImageIcon(getClass().getResource("/calendar.png"));
+        tabbedPane.addTab("Calendarización", iconCal, schedView.getPanel());
 
         //Actividades
         ActivityModel actModel = new ActivityModel();
         ActivityView actView = new ActivityView();
         ActivityController actController = new ActivityController(actView, actModel);
-        tabbedPane.addTab("Actividades", actView.getPanel());
+        ImageIcon iconView= new ImageIcon(getClass().getResource("/activities.png"));
+        tabbedPane.addTab("Actividades", iconView, actView.getPanel());
 
         // Estadísticas
         StatisticsModel statModel = new StatisticsModel();
         StatisticsView statView = new StatisticsView();
         StatisticsController statController = new StatisticsController(statView, statModel);
-        tabbedPane.addTab("Estadísticas", statView.getPanel());
+        ImageIcon iconStat = new ImageIcon(getClass().getResource("/statistic.png"));
+        tabbedPane.addTab("Estadísticas", iconStat, statView.getPanel());
+       // tabbedPane.addTab("Estadísticas", statView.getPanel());
 
         // vista
         employeeFrame.add(tabbedPane);
