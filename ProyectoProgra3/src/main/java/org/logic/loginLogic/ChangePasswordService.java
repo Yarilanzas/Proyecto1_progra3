@@ -1,8 +1,15 @@
 package org.logic.loginLogic;
 
 import org.domain.User;
+import org.data.UserDAO;
 
 public class ChangePasswordService {
+
+    private final UserDAO userDAO;
+
+    public ChangePasswordService(){
+        this.userDAO = new UserDAO();
+    }
 
     public void changePassword(String id, String actual, String nueva, String confirmacion) throws Exception {
         if (id == null || id.trim().isEmpty()) {
@@ -16,21 +23,11 @@ public class ChangePasswordService {
             throw new Exception("La contraseña nueva y la confirmación no coinciden");
         }
 
-        Data data = XMLRepository.instance().load();
-        String idUpper = id.toUpperCase();
         User userActualizado = null;
 
-        if (idUpper.startsWith("ADM")) {
-            userActualizado = data.getAdministrators().stream()
-                    .filter(a -> a.getId().equalsIgnoreCase(id))
-                    .findFirst()
-                    .orElse(null);
-        } else if (idUpper.startsWith("FUN")) {
-            userActualizado = data.getEmployees().stream()
-                    .filter(e -> e.getId().equalsIgnoreCase(id))
-                    .findFirst()
-                    .orElse(null);
-        }
+        try {
+            userActualizado = userDAO.read(id.trim());
+        } catch (Exception ignored) {}
 
         if (userActualizado == null) {
             throw new Exception("Usuario no encontrado");
@@ -40,7 +37,6 @@ public class ChangePasswordService {
             throw new Exception("La contraseña actual es incorrecta");
         }
 
-        userActualizado.setPassword(nueva);
-        XMLRepository.instance().store(data);
+        userDAO.changePassword(userActualizado.getId(), nueva);
     }
 }

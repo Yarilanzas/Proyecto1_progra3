@@ -1,6 +1,7 @@
 package org.data;
 
 
+import org.domain.Resource;
 import org.domain.User;
 import org.domain.Employee;
 import org.domain.Administrator;
@@ -45,6 +46,28 @@ public class UserDAO {
         }
     }
 
+    public List<Employee> findAllEmployees() {
+        List<Employee> resultado = new ArrayList<>();
+        String sql = "select u.id, u.clave, u.rol, f.nombre, f.telefono " +
+                "from usuario u " +
+                "inner join funcionario f on u.id = f.id";
+
+        try (PreparedStatement stm = db.prepareStatement(sql);
+             ResultSet rs = db.executeQuery(stm)) {
+
+            while (rs != null && rs.next()) {
+                Employee emp = (Employee) from(rs, "u", "f");
+
+                if (emp != null) {
+                    resultado.add(emp);
+                }
+            }
+
+        } catch (SQLException ex) {
+            System.err.println("Error al obtener todos los funcionarios: " + ex.getMessage());
+        }
+        return resultado;
+    }
     public void create(User u) throws Exception{
         String rol = (u instanceof  Administrator) ? "ADMIN" : "FUNCIONARIO";
 
@@ -129,6 +152,8 @@ public class UserDAO {
 
     public void delete(String id) throws Exception{
         try {
+            db.beginTransaction();
+
             String sqlFuncionario = "delete from funcionario where id=?";
             PreparedStatement stmF = db.prepareStatement(sqlFuncionario);
             stmF.setString(1,id);
@@ -137,10 +162,12 @@ public class UserDAO {
             String sqlUsuario = "delete from usuario where id=?";
             PreparedStatement stmU = db.prepareStatement(sqlUsuario);
             stmU.setString(1, id);
+
             int count = db.executeUpdate(stmU);
             if (count == 0){
                 throw new Exception("Usuario no existe");
             }
+
             db.commit();
         }catch (Exception ex){
             db.rollback();

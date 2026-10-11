@@ -40,7 +40,7 @@ public class ReservationQueryService {
     }
 
     public CalendarData getCalendar(LocalDate fecha,Category categoria) throws Exception{
-       List<Resource> recursos = resourceDAO.findbyCategory(categoria.getId());
+       List<Resource> recursos = resourceDAO.findByCategory(categoria.getId());
        List<Reservation> reservas = reservationDAO.findAll();
 
         List<String> horas = Arrays.asList(HORAS);

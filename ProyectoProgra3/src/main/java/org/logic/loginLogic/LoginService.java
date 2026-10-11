@@ -1,46 +1,19 @@
 package org.logic.loginLogic;
 
 import org.domain.User;
-
-import java.io.File;
+import org.data.UserDAO;
 
 public class LoginService {
 
     private static LoginService theInstance;
+    private final UserDAO userDAO;
 
     public static LoginService instance() {
         if (theInstance == null) theInstance = new LoginService();
         return theInstance;
     }
 
-    private Data data;
-
-    private LoginService() {
-        try {
-            File file = new File("data.xml");
-            System.out.println("Ruta absoluta del XML: " + file.getAbsolutePath());
-            System.out.println("¿Existe el archivo?: " + file.exists());
-
-            data = XMLRepository.instance().load();
-
-            System.out.println("Administradores cargados: " + (data != null && data.getAdministrators() != null ? data.getAdministrators().size() : 0));
-            System.out.println("Funcionarios cargados: " + (data != null && data.getEmployees() != null ? data.getEmployees().size() : 0));
-            System.out.println("Recursos cargados: " + (data != null && data.getResources() != null ? data.getResources().size() : 0));
-
-
-        } catch (Exception e) {
-            System.err.println("Error al cargar la base de datos: " + e.getMessage());
-            e.printStackTrace(); // Imprime la traza completa para ver si falla la lectura XML
-            data = new Data();
-        }
-
-
-        try {
-            data = XMLRepository.instance().load();
-        } catch (Exception e) {
-            System.err.println("Error al cargar la base de datos: " + e.getMessage());
-            data = new Data();
-        }
+    private LoginService() { this.userDAO = new UserDAO();
     }
 
     public User read(String id, String password) throws Exception {
@@ -50,30 +23,32 @@ public class LoginService {
 
         String idClean = id.trim();
         String idUpper = idClean.toUpperCase();
+
+        if (!idUpper.startsWith("ADM") && !idUpper.startsWith("FUN")){
+            throw new Exception("El id debe iniciar con su distintivo (ADM o FUN)");
+        }
+
         User result = null;
+        try {
+            result = userDAO.read(idClean);
+        } catch (Exception e){
 
-        if (idUpper.startsWith("ADM")) {
-            result = data.getAdministrators().stream()
-                    .filter(i -> i.getId() != null && i.getId().equalsIgnoreCase(idClean))
-                    .findFirst()
-                    .orElse(null);
+            System.err.println("--- ERROR REAL DE CONEXIÓN/SQL ---");
+            e.printStackTrace();
 
-            if (result == null) {
+            if (idUpper.startsWith("ADM")) {
                 throw new Exception("Administrador no existe");
-            }
-
-        } else if (idUpper.startsWith("FUN")) {
-            result = data.getEmployees().stream()
-                    .filter(i -> i.getId() != null && i.getId().equalsIgnoreCase(idClean))
-                    .findFirst()
-                    .orElse(null);
-
-            if (result == null) {
+            } else {
                 throw new Exception("Funcionario no existe");
             }
+        }
 
-        } else {
-            throw new Exception("El id debe iniciar con su distintivo (ADM o FUN)");
+        if (result == null) {
+            if (idUpper.startsWith("ADM")) {
+                throw new Exception("Administrador no existe");
+            } else {
+                throw new Exception("Funcionario no existe");
+            }
         }
 
         if (!result.getPassword().equals(password)) {
@@ -82,24 +57,6 @@ public class LoginService {
 
         return result;
     }
-
-
 }
 
-    /*public static User user;
-
-    public LoginService(User user) {
-        this.user=user;
-    }
-
-    public static void setUser(User user) {
-        LoginService.user = user;
-    }
-    public static void logOut(){
-        user=null;
-    }
-    public static boolean isLoggedIn(){
-        return user!=null;
-
-    }*/
 

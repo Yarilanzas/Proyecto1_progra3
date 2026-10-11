@@ -1,52 +1,64 @@
 package org.logic;
 
+import org.data.UserDAO;
 import org.domain.Employee;
+import org.domain.User;
+
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class EmployeeService {
+
+    private final UserDAO userDAO;
+
+    public EmployeeService(){
+        this.userDAO = new UserDAO();
+    }
+
     public List<Employee> findAll() throws Exception{
-        Data data = XMLRepository.instance().load();
-        return data.getEmployees();
+       return userDAO.findAllEmployees();
     }
 
     public Employee findById(String id) throws Exception{
-        Data data = XMLRepository.instance().load();
-        for (Employee e : data.getEmployees()){
-            if (e.getId().equals(id)){
-                return e;
-            }
-        }
-        return null;
+       try {
+           User user = userDAO.read(id);
+           if (user instanceof Employee){
+               return (Employee) user ;
+           }
+       } catch (Exception ignored) {
+
+       }
+       return null;
     }
 
     public List<Employee> findByName(String name) throws Exception{
-        Data data = XMLRepository.instance().load();
-        return data.getEmployees().stream().
-                filter(e-> e.getName().toLowerCase().contains(name.toLowerCase())).collect(Collectors.toList());
+        return userDAO.findEmployeebyName(name);
     }
 
     public void save(Employee employee) throws Exception{
-        Data data = XMLRepository.instance().load();
-        Employee exist = findByIdIn(data.getEmployees(), employee.getId());
+        Employee exist = null;
+        if (employee.getId() != null && !employee.getId().trim().isEmpty()){
+            exist = findById(employee.getId());
+        }
+
         if (exist != null){
-            data.getEmployees().remove(exist);
+            userDAO.update(employee);
         } else {
-            String nuevo = generateId(data.getEmployees());
+            String nuevo = generateId(findAll());
             employee.setId(nuevo);
             employee.setPassword(employee.getId());
+
+            userDAO.create(employee);
         }
-        data.getEmployees().add(employee);
-        XMLRepository.instance().store(data);
+
     }
 
     public void delete(String id) throws Exception{
-        Data data = XMLRepository.instance().load();
-        Employee exist = findByIdIn(data.getEmployees(),id);
-        if (exist != null){
-            data.getEmployees().remove(exist);
-            XMLRepository.instance().store(data);
-        }
+       Employee exist = findById(id);
+       if (exist != null){
+           userDAO.delete(id);
+       } else {
+           throw new Exception("El funcionario no existe");
+       }
     }
 
     private Employee findByIdIn(List<Employee> list, String id){

@@ -11,7 +11,7 @@ import java.util.Properties;
 
 public class Database {
     private static Database theInstance;
-    public static final String PROPERTIES_FILE_NAME="/database.properties";
+    public static final String PROPERTIES_FILE_NAME = "/reservas/database.properties";
     Connection cnx;
 
     public static synchronized Database instance(){

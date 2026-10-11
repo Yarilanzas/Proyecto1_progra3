@@ -16,7 +16,7 @@ public class CategoryDAO {
     }
 
     public void create(Category c) throws Exception {
-        String sql = "insert into categoria (id, descripcion) values (?,?,?)";
+        String sql = "insert into categoria (id, descripcion) values (?,?)";
         PreparedStatement stm = db.prepareStatement(sql);
         stm.setString(1, c.getId());
         stm.setString(2, c.getDescription());

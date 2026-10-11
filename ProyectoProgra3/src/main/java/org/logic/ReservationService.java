@@ -32,13 +32,13 @@ public class ReservationService {
     public void save(Reservation newReservation, List<Category> categoriasSeleccionadas) throws Exception {
         List<Reservation> todasReservas = reservationDAO.findAll();
 
-        newReservation.setId(generateNextId(todasReservas.size()));
+        newReservation.setId(generateNextId(todasReservas));
         newReservation.setStatus("ACTIVA");
 
         List<Resource> recursosAsignados = new ArrayList<>();
 
         for (Category cat : categoriasSeleccionadas) {
-            List<Resource> recursosDeCat = resourceDAO.findbyCategory(cat.getId());
+            List<Resource> recursosDeCat = resourceDAO.findByCategory(cat.getId());
 
             Resource disponible = buscarRecursoDisponible(recursosDeCat, newReservation, todasReservas);
 
@@ -88,10 +88,25 @@ public class ReservationService {
         return null;
     }
 
+    public String generateNextId(List<Reservation> reservas) {
+        int max = 0;
+        for (Reservation r : reservas) {
+            if (r.getId() != null) {
+                String num = r.getId().replace("RES-", "");
+                try {
+                    int valor = Integer.parseInt(num);
+                    if (valor > max) {
+                        max = valor;
+                    }
+                } catch (NumberFormatException ignored) {}
+            }
+        }
+        return String.format("RES-%03d", max + 1);
+    }
+
     public static String generateNextId(int lastNumber) {
         return String.format("RES-%03d", lastNumber + 1);
     }
-
     public List<Reservation> findAllResources() throws Exception{
         return reservationDAO.findAll();
     }

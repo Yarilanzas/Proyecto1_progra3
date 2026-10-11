@@ -32,7 +32,7 @@ public class ResourceDAO {
     }
 
     public Resource read (String id) throws Exception{
-        String sql = "select r.descripcion, r.des, c.id, c.descripcion " +
+        String sql = "select r.descripcion, r.descripcion, c.id, c.descripcion " +
                 "from recurso r " +
                 "inner join categoria c on r.categoria_id = c.id " +
                 "where r.id = ?";
@@ -78,7 +78,7 @@ public class ResourceDAO {
         }
     }
 
-    public List<Resource> findbyDescription(String descripcion){
+    public List<Resource> findByDescription(String descripcion){
         List<Resource> resultado = new ArrayList<>();
         try {
             String sql = "select r.id, r.descripcion, c.id, c.descripcion " +
@@ -98,7 +98,7 @@ public class ResourceDAO {
         return resultado;
     }
 
-    public List<Resource> findbyCategory(String categoriaId){
+    public List<Resource> findByCategory(String categoriaId){
         List<Resource> resultado = new ArrayList<>();
         try {
             String sql = "select r.id, r.descripcion, c.id, c.descripcion " +
@@ -116,6 +116,25 @@ public class ResourceDAO {
             System.err.println("Error al buscar por categoria: " + ex.getMessage());
         }
         return resultado;
+    }
+
+    public List<Resource> findAll(){
+        List<Resource> recursos = new ArrayList<>();
+        try{
+            String sql = "select r.id, r.descripcion, c.id, c.descripcion " +
+                    "from recurso r " +
+                    "inner join categoria c on r.categoria_id = c.id";
+            PreparedStatement stm = db.prepareStatement(sql);
+            ResultSet rs = db.executeQuery(stm);
+
+            while (rs != null && rs.next()){
+                recursos.add(from(rs,"r","c"));
+            }
+
+        } catch (SQLException ex){
+            System.err.println("Error al obtener todos los recursos: " + ex.getMessage());
+        }
+        return recursos;
     }
 
     public Resource from(ResultSet rs, String aliasR, String aliasC) {
