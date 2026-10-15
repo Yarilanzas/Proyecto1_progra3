@@ -19,6 +19,7 @@ import org.presentation.statistics.ActivityStatistics;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 import java.time.DayOfWeek;
@@ -72,10 +73,14 @@ public class ReservationQueryService {
     }
 
     private boolean horaEnRango(String hora,String inicio, String fin){
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("HH:mm");
-        LocalTime h = LocalTime.parse(hora,fmt);
-        LocalTime in = LocalTime.parse(inicio,fmt);
-        LocalTime finn = LocalTime.parse(fin,fmt);
+        //DateTimeFormatter fmt = DateTimeFormatter.ofPattern("HH:mm:ss");
+        //obj para formatear las horas a algun patron, appendPattern("[H:mm:ss][HH:mm:ss][H:mm][HH:mm]") essto
+        //añade los patrones que puede seguir una fecha y lo intenta con todos hasta que coincida con alguno
+        DateTimeFormatter formatter= new DateTimeFormatterBuilder().appendPattern("[H:mm:ss][HH:mm:ss][H:mm][HH:mm]").toFormatter();
+
+        LocalTime h = LocalTime.parse(hora,formatter);
+        LocalTime in = LocalTime.parse(inicio,formatter);
+        LocalTime finn = LocalTime.parse(fin,formatter);
         return !h.isBefore(in) && h.isBefore(finn);
     }
 
